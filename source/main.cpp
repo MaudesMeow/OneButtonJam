@@ -1,8 +1,8 @@
 #include <raylib.h>
 #include <math.h>
 
-#define BASE_WIDTH 480
-#define BASE_HEIGHT 480
+#define BASE_WIDTH 200
+#define BASE_HEIGHT 200
 #define PROJECT_NAME "Game"
 
 #ifdef PLATFORM_WEB
@@ -22,6 +22,9 @@ void Update(void);
 void Draw(void);
 void Unload(void);
 void UpdateDrawFrame(void);
+
+float posX = 0;
+int direction = 1;
 
 
 // ---------------------------------------------------------------------------MAIN FUNCTION
@@ -55,6 +58,23 @@ void Init(void)
 void Update(void)
 {
 
+    if (IsKeyPressed(KEY_SPACE))
+    {
+        direction *= -1;
+    }
+
+    posX += (320*GetFrameTime() * direction);
+    if (posX <= 0)
+    {
+        direction = 1;
+    }
+    if (posX >= GetScreenWidth() -32)
+    {
+       direction = -1;
+    }
+
+    
+
 
 
 }
@@ -62,6 +82,8 @@ void Update(void)
 void Draw(void)
 {
     ClearBackground(BLACK);
+    DrawText("hello", 32,32,54,WHITE);
+    DrawRectangle(posX,320,32,32,WHITE);
 
 
 

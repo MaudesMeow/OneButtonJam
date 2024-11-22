@@ -1,17 +1,15 @@
 # i.e. https://itch-user.itch.io/itch-page
-ITCH_USER = wizard-jordan
-ITCH_PAGE = test
+ITCH_USER = the-bert
+ITCH_PAGE = thecastle
 
 PROJECT_NAME 	= "Game"
 PROJECT_VERSION = "0.1"
-BASE_WIDTH 	=  480
-BASE_HEIGHT =  480
+
 
 # Define PROJECT_NAME, PROJECT_VERSION, and resolution variables for use in code
 DEFINES = -DPROJECT_NAME=\"$(PROJECT_NAME)\" \
 	  -DPROJECT_VERSION=\"$(PROJECT_VERSION)\" \
-	  -DBASE_WIDTH=$(BASE_WIDTH) \
-	  -DBASE_HEIGHT=$(BASE_HEIGHT)
+
 
 # Search source folder and subfolders for .c files
 CFILES = $(wildcard source/*.cpp source/*/*.cpp)
@@ -32,6 +30,12 @@ BROWSER = firefox
 local_build: 
 	g++ $(CFILES) -o main $(DEFINES) $(INCLUDES) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
+run:
+	./main
+
+clean: 
+	rm main
+
 web_build:
 	mkdir -p build && \
 	cd $(EMSDK_PATH) && . ./emsdk_env.sh && cd "${PWD}" && \
@@ -43,6 +47,9 @@ web_run:
 
 web_zip:
 	cd build && zip $(WEB_ZIP) index.*
+
+#Local build 
+local: local_build run clean
 
 # Build and run in browser
 test_web: web_build web_run
