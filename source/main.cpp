@@ -1,8 +1,11 @@
 #include <raylib.h>
 #include <math.h>
 
-#define BASE_WIDTH 200
-#define BASE_HEIGHT 200
+#include "globals.hpp"
+#include "player.hpp"
+#include "stars.hpp"
+#include "enemy.hpp"
+
 #define PROJECT_NAME "Game"
 
 #ifdef PLATFORM_WEB
@@ -25,6 +28,11 @@ void UpdateDrawFrame(void);
 
 float posX = 0;
 int direction = 1;
+const int starCount =  2000;
+Stars stars[starCount];
+
+Player player;
+Enemy enemy;
 
 
 // ---------------------------------------------------------------------------MAIN FUNCTION
@@ -51,29 +59,24 @@ void Init(void)
 
     InitWindow(BASE_WIDTH * 2, BASE_HEIGHT * 2, PROJECT_NAME);
 
-    SetWindowMinSize(BASE_WIDTH, BASE_HEIGHT);
+
+
+    Texture2D playerSprite = LoadTexture("assets/player-bug.png");
+    
+    player = Player(playerSprite, {0,(float)GetScreenHeight()-playerSprite.height*2-8});
+    enemy = Enemy(Vector2{320,0});
+   
+    InitStars(stars,starCount); 
+
 
 }
 // ---------------------------------------------------------------------------UPDATE FUNCTION
 void Update(void)
 {
-
-    if (IsKeyPressed(KEY_SPACE))
-    {
-        direction *= -1;
-    }
-
-    posX += (320*GetFrameTime() * direction);
-    if (posX <= 0)
-    {
-        direction = 1;
-    }
-    if (posX >= GetScreenWidth() -32)
-    {
-       direction = -1;
-    }
-
+    UpdateStars(stars,starCount);
     
+
+    player.HandleInput();
 
 
 
@@ -82,8 +85,15 @@ void Update(void)
 void Draw(void)
 {
     ClearBackground(BLACK);
-    DrawText("hello", 32,32,54,WHITE);
-    DrawRectangle(posX,320,32,32,WHITE);
+    // DrawText("hello", 32,32,54,WHITE);
+
+    // DrawRectangle(32,0,8,GetScreenHeight(),WHITE);
+    // DrawRectangle(GetScreenWidth()-32-8,0,8,GetScreenHeight(),WHITE);
+    DrawStars(stars,starCount);
+    player.AnimatePlayer();
+    enemy.EnemyBehavior();
+
+
 
 
 
