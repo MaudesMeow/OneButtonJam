@@ -11,7 +11,7 @@
 
 using namespace std;
 
-#define BASE_WIDTH 320
-#define BASE_HEIGHT 320
+#define BASE_WIDTH 400
+#define BASE_HEIGHT 400
 
 #endif

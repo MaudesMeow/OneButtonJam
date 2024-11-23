@@ -7,11 +7,11 @@ void InitStars(Stars star[], int starCount)
 {
     for (int i = 0; i < starCount; i++)
     {
-        star[i].pos.x = GetRandomValue(0, GetScreenWidth());  // Random X within the screen width
+        star[i].pos.x = GetRandomValue(96, GetScreenWidth()-96);  // Random X within the screen width
         star[i].pos.y = GetRandomValue(0, GetScreenHeight()); // Random Y within the screen height
         randomFloat = static_cast <float> (rand()+0.75) / (static_cast <float> (RAND_MAX/randomSizeFloat));
         star[i].size = randomFloat;
-        star[i].color = (Color){ GetRandomValue(0, 255), GetRandomValue(0, 250), GetRandomValue(0, 255), 255 };
+        star[i].color = (Color){ (unsigned char)GetRandomValue(0, 255), (unsigned char)GetRandomValue(0, 250), (unsigned char)GetRandomValue(0, 255), 255 };
     }
 }
 
@@ -33,10 +33,11 @@ void UpdateStars(Stars star[], int starCount)
         // Reset the star's position if it goes off the bottom
         if (star[i].pos.y > GetScreenHeight())
         {
+            star[i].pos.x = GetRandomValue(96, GetScreenWidth()-96);  // Random X within the screen width
             star[i].pos.y = 0;
             randomFloat = static_cast <float> (rand()+0.75) / (static_cast <float> (RAND_MAX/randomSizeFloat));
             star[i].size = randomFloat;
-            star[i].color = (Color){ GetRandomValue(0, 255), GetRandomValue(0, 250), GetRandomValue(0, 255), 255 };
+            star[i].color = (Color){ (unsigned char)GetRandomValue(0, 255), (unsigned char)GetRandomValue(0, 250), (unsigned char)GetRandomValue(0, 255), 255 };
         }
     }
 }

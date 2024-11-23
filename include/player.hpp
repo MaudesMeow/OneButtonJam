@@ -15,6 +15,7 @@ class Player
         {
             this->playerSprite = playerSprite;
             this->pos = pos;
+            direction = 1;
         }
 
 

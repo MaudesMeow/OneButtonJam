@@ -63,7 +63,7 @@ void Init(void)
 
     Texture2D playerSprite = LoadTexture("assets/player-bug.png");
     
-    player = Player(playerSprite, {0,(float)GetScreenHeight()-playerSprite.height*2-8});
+    player = Player(playerSprite, {(float)GetScreenWidth()/2,(float)GetScreenHeight()-playerSprite.height*2-8});
     enemy = Enemy(Vector2{320,0});
    
     InitStars(stars,starCount); 
@@ -90,6 +90,7 @@ void Draw(void)
     // DrawRectangle(32,0,8,GetScreenHeight(),WHITE);
     // DrawRectangle(GetScreenWidth()-32-8,0,8,GetScreenHeight(),WHITE);
     DrawStars(stars,starCount);
+    DrawText("AMMO: ",0,0,24,WHITE);
     player.AnimatePlayer();
     enemy.EnemyBehavior();
 
