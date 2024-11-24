@@ -5,6 +5,8 @@
 #include "player.hpp"
 #include "stars.hpp"
 #include "enemy.hpp"
+#include "ammo.hpp"
+#include "gameplay.cpp"
 
 #define PROJECT_NAME "Game"
 
@@ -30,6 +32,7 @@ float posX = 0;
 int direction = 1;
 const int starCount =  2000;
 Stars stars[starCount];
+vector<Ammo> ammoCount;
 
 Player player;
 Enemy enemy;
@@ -62,10 +65,8 @@ void Init(void)
 
 
     Texture2D playerSprite = LoadTexture("assets/player-bug.png");
-    
     player = Player(playerSprite, {(float)GetScreenWidth()/2,(float)GetScreenHeight()-playerSprite.height*2-8});
     enemy = Enemy(Vector2{320,0});
-   
     InitStars(stars,starCount); 
 
 
@@ -74,8 +75,6 @@ void Init(void)
 void Update(void)
 {
     UpdateStars(stars,starCount);
-    
-
     player.HandleInput();
 
 
@@ -85,12 +84,11 @@ void Update(void)
 void Draw(void)
 {
     ClearBackground(BLACK);
-    // DrawText("hello", 32,32,54,WHITE);
-
-    // DrawRectangle(32,0,8,GetScreenHeight(),WHITE);
-    // DrawRectangle(GetScreenWidth()-32-8,0,8,GetScreenHeight(),WHITE);
+    
+    DisplayAmmo(player.ReturnAmmoCount());
+    PopulateBonuses();
     DrawStars(stars,starCount);
-    DrawText("AMMO: ",0,0,24,WHITE);
+    DrawText("AMMO: ",8,0,24,WHITE);
     player.AnimatePlayer();
     enemy.EnemyBehavior();
 
