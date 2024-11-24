@@ -6,7 +6,7 @@
 #include "stars.hpp"
 #include "enemy.hpp"
 #include "ammo.hpp"
-#include "gameplay.cpp"
+#include "gameplay.hpp"
 
 #define PROJECT_NAME "Game"
 

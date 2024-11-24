@@ -4,11 +4,6 @@
 #include "player.hpp"
 #include "globals.hpp"
 
-enum BonusType
-{
-    AMMO,
-    TELEPORTER
-};
 
 void HandleBonusCollisions(Player *player);
 void PopulateBonuses();
