@@ -7,6 +7,7 @@
 #include "enemy.hpp"
 #include "ammo.hpp"
 #include "gameplay.hpp"
+#include "bonus.hpp"
 
 #define PROJECT_NAME "Game"
 
@@ -36,6 +37,7 @@ vector<Ammo> ammoCount;
 
 Player player;
 Enemy enemy;
+AmmosBonus ammoBonus;
 
 
 // ---------------------------------------------------------------------------MAIN FUNCTION
@@ -67,6 +69,7 @@ void Init(void)
     Texture2D playerSprite = LoadTexture("assets/player-bug.png");
     player = Player(playerSprite, {(float)GetScreenWidth()/2,(float)GetScreenHeight()-playerSprite.height*2-8});
     enemy = Enemy(Vector2{320,0});
+    ammoBonus = AmmosBonus({320,320});
     InitStars(stars,starCount); 
 
 
@@ -86,11 +89,13 @@ void Draw(void)
     ClearBackground(BLACK);
     
     DisplayAmmo(player.ReturnAmmoCount());
-    PopulateBonuses();
+    
     DrawStars(stars,starCount);
     DrawText("AMMO: ",8,0,24,WHITE);
     player.AnimatePlayer();
     enemy.EnemyBehavior();
+    ammoBonus.DrawBonus();
+   
 
 
 

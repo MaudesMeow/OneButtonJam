@@ -1,15 +1,25 @@
 #include "bonus.hpp"
 
-
-void Bonus::DrawBonus(BonusType type)
+   Vector2 p1, p2, p3;
+void AmmosBonus::DrawBonus()
 {
-    switch (type)
-    {
-    case AMMO:
-        /* code */
-        break;
     
-    default:
-        break;
-    }
+    
+    DrawTriangleLines(p1, p2, p3, WHITE);
+}
+
+
+void Teleporter::DrawBonus()
+{
+
+    DrawCircleV(pos, 20, BLUE);
+}
+
+void HandleBonusCollisions(Player *player)
+{
+
+}
+void PopulateBonuses()
+{
+    
 }

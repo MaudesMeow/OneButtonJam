@@ -5,7 +5,6 @@
 #include "globals.hpp"
 
 
-void HandleBonusCollisions(Player *player);
-void PopulateBonuses();
+
 
 #endif

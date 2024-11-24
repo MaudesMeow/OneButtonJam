@@ -1,6 +1,6 @@
 #include "ammo.hpp"
 
-void DisplayAmmo(int ammoAmount)
+void DisplayAmmo(int ammoAmount) // Display function for side of screen to let player know how much ammo they have 
 {
     for (int i = 0; i < ammoAmount; i++)
     {

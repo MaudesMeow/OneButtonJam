@@ -12,7 +12,7 @@ class Ammo
 
 };
 
-void DisplayAmmo(int ammoAmount);
+void DisplayAmmo(int ammoAmount);  // Display function for side of screen to let player know how much ammo they have 
 void AnimateFiredAmmo();
 
 
