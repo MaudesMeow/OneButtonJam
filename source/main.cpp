@@ -36,8 +36,9 @@ Stars stars[starCount];
 vector<Ammo> ammoCount;
 
 Player player;
-Enemy enemy;
-AmmosBonus ammoBonus;
+vector<Bonus*> bonusList;
+vector<Enemy*> enemyList;
+
 
 
 // ---------------------------------------------------------------------------MAIN FUNCTION
@@ -68,8 +69,8 @@ void Init(void)
 
     Texture2D playerSprite = LoadTexture("assets/player-bug.png");
     player = Player(playerSprite, {(float)GetScreenWidth()/2,(float)GetScreenHeight()-playerSprite.height*2-8});
-    enemy = Enemy(Vector2{320,0});
-    ammoBonus = AmmosBonus({320,320});
+    
+
     InitStars(stars,starCount); 
 
 
@@ -79,6 +80,8 @@ void Update(void)
 {
     UpdateStars(stars,starCount);
     player.HandleInput();
+    UpdateBonusBehavior(bonusList, &player);
+    UpdateEnemyBehavior(enemyList,14);
 
 
 
@@ -88,13 +91,22 @@ void Draw(void)
 {
     ClearBackground(BLACK);
     
-    DisplayAmmo(player.ReturnAmmoCount());
+    DisplayAmmo(player.GetAmmoCount());
     
     DrawStars(stars,starCount);
     DrawText("AMMO: ",8,0,24,WHITE);
     player.AnimatePlayer();
-    enemy.EnemyBehavior();
-    ammoBonus.DrawBonus();
+   
+    
+
+    for (Bonus *bonus : bonusList)
+    {
+        bonus->DrawBonus();
+    }
+    for (Enemy *enemy: enemyList)
+    {
+        enemy->DrawEnemies();
+    }
    
 
 

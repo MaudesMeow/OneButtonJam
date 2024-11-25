@@ -21,15 +21,24 @@ void Player::HandleInput()
         
     }
     pos.x += (speed*GetFrameTime() * direction);
-    if (IsKeyPressed(KEY_SPACE))
+    if (IsKeyPressed(KEY_SPACE) )
     {
         direction *= -1;
-        if (bulletfired == false)
-        {
-        lastX = (direction < 0) ? pos.x : pos.x + 32;
+
         
-        bulletfired = true;
+        if (GetAmmoCount() < 0){canShoot = false;};
+        if (canShoot)
+        {
+            
+            if (bulletfired == false)
+            {
+            (SetAmmoCount(GetAmmoCount()-1));
+            lastX = (direction < 0) ? pos.x : pos.x + 32;
+            
+            bulletfired = true;
+            }
         }
+
 
     }
 

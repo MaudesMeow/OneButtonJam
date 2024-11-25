@@ -1,8 +1,8 @@
 #include "stars.hpp"
 
 
-float randomFloat;
-float randomSizeFloat = 0.8;
+static float randomFloat;
+static float randomSizeFloat = 0.8;
 void InitStars(Stars star[], int starCount)
 {
     for (int i = 0; i < starCount; i++)

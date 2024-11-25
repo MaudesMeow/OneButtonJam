@@ -2,7 +2,7 @@
 
 void DisplayAmmo(int ammoAmount) // Display function for side of screen to let player know how much ammo they have 
 {
-    for (int i = 0; i < ammoAmount; i++)
+    for (int i = 0; i <= ammoAmount; i++)
     {
         switch (i)
         {
