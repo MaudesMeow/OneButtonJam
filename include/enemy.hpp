@@ -18,6 +18,8 @@ class Enemy
         bool initiated;
         EnemyType type;
         bool isAlive;
+        float waitTime;
+        float counter;
 
 
         Enemy() : pos({0,0}) {}
@@ -27,6 +29,8 @@ class Enemy
             size = 48;
             type = AVERAGE;
             isAlive = true;
+            waitTime = GetRandomValue(0,10);
+            counter = 0;
         }
 
         void DrawEnemies();

@@ -9,8 +9,8 @@ void AmmosBonus::DrawBonus()
     
 
     DrawTriangleLines(p1, p2, p3, WHITE);
-    DrawTriangleLines(p4,p5,p6,ColorAlpha((Color){255,255,255},0.5));
-    DrawTriangleLines(p7,p8,p9,ColorAlpha((Color){255,255,255},0.3));
+    DrawTriangleLines(p4,p5,p6,ColorAlpha(Color{255,255,255},0.5));
+    DrawTriangleLines(p7,p8,p9,ColorAlpha(Color{255,255,255},0.3));
     
 
     p1.y += (320*GetFrameTime());
@@ -50,10 +50,10 @@ Bonus* PopulateBonuses()
     switch (bonusOption)
     {
     case 1:
-        return new AmmosBonus((Vector2){GetRandomValue(92,GetScreenWidth()-92),-16});
+        return new AmmosBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-16});
         break;
     case 2: 
-        return new TeleporterBonus((Vector2){GetRandomValue(92,GetScreenWidth()-92),-16});
+        return new TeleporterBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-16});
         break;
     default:
         return NULL;
@@ -62,43 +62,49 @@ Bonus* PopulateBonuses()
     
 }
 
-void UpdateBonusBehavior(vector<Bonus*> &bonusList, Player *player)
+void UpdateBonusBehavior(std::vector<Bonus*> &bonusList, Player *player)
 {
-    if (bonusList.size() < 3)
+    // Populate bonuses if needed
+    while (bonusList.size() < 3)
     {
-        // cout << "bonus list size is  " << bonusList.size() << endl;
-        bonusList.push_back(PopulateBonuses());
-    }
-    for (auto it = bonusList.begin(); it != bonusList.end(); ) 
-    {
-        if (!(*it)->isValid) 
-            {
-            it = bonusList.erase(it); 
-            } else 
-            {
-                ++it;
-            }
+        Bonus* newBonus = PopulateBonuses();
+        if (newBonus)  // Ensure newBonus is not nullptr
+        {
+            bonusList.push_back(newBonus);
+        }
     }
 
-    for (Bonus *bonus : bonusList)
+    // Iterate over the bonus list, handle validity, and update behavior in one pass
+    for (auto it = bonusList.begin(); it != bonusList.end(); )
     {
+        Bonus* bonus = *it;
+
+        // Check bonus behavior based on type
         switch (bonus->type)
         {
         case AMMO:
-            if (CheckCollisionPointTriangle((Vector2){player->pos.x+16,player->pos.y},bonus->p1,bonus->p2,bonus->p3))
+            if (CheckCollisionPointTriangle(Vector2{player->pos.x + 16, player->pos.y}, bonus->p1, bonus->p2, bonus->p3))
             {
-                // cout << "this is happening " << endl;
                 player->SetAmmoCount(2);
                 player->canShoot = true;
                 bonus->isValid = false;
-                
             }
-
             break;
         
         default:
             break;
         }
-    }
 
+        // Remove invalid bonuses after updating behavior
+        if (!bonus->isValid)
+        {
+            delete bonus;  // Free memory to prevent leaks
+            it = bonusList.erase(it);  // Erase and update iterator
+        }
+        else
+        {
+            ++it;  // Move to the next element if no removal occurred
+        }
+    }
 }
+

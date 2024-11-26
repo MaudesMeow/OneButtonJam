@@ -1,0 +1,1 @@
+i686-w64-mingw32-g++ ./source/*.cpp -o elements.exe -O1 -Wall -Wno-missing-braces -I ./include/ -L "C:\raylib-5.5_win32_mingw-w64\lib\" -lraylib -lopengl32 -lgdi32 -lwinmm -D_GLIBCXX_DEBUG

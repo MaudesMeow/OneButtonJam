@@ -27,6 +27,9 @@ EMSDK_PATH = /home/hal9000/emsdk
 # Use `emrun --list_browsers` for more options
 BROWSER = firefox
 
+windows_build:
+	i686-w64-mingw32-g++ ./source/*.cpp -o spacemoth.exe -O1 -Wall -Wno-missing-braces -I ./include/ -L /home/hal9000/raylib-5.0_win32_mingw-w64/lib/ -lraylib -lopengl32 -lgdi32 -lwinmm -D_GLIBCXX_DEBUG
+
 local_build: 
 	g++ $(CFILES) -o main $(DEFINES) $(INCLUDES) -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
@@ -60,3 +63,5 @@ release_web: web_build web_zip
 # Publish directly to itch.io (you will need to install and login to butler)
 publish_web:
 	/home/hal9000/butler push build/$(WEB_ZIP) $(ITCH_USER)/$(ITCH_PAGE):web --userversion $(PROJECT_VERSION)
+
+windows: windows_build
