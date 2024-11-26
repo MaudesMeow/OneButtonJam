@@ -2,18 +2,40 @@
 
 void Enemy::DrawEnemies()
 {
+    int numFrames = 4;
+    int frameWidth = sprite.width / numFrames; // Width of a single frame
+    int frameHeight = sprite.height; // Assuming all frames have the same height
+    float frameTime = 0.3f; // Time per frame in seconds 
+    int currentFrame = static_cast<int>(GetTime() / frameTime) % numFrames;
+
+    Rectangle src = 
+    {
+        (float)(frameWidth * currentFrame), // X position of the current frame
+        0, // Y position of the current frame (assuming a single row of frames)
+        (float)frameWidth, // Width of the current frame
+        (float)frameHeight // Height of the current frame  
+    } ;
+
+    Rectangle dest = 
+    {
+        pos.x, // X position on the screen
+        pos.y, // Y position on the screen
+        (float)frameWidth *3, // Width of the drawn framed)
+        (float)frameHeight *3 // Height of the drawn frame (scaled)
+    };
+
+    DrawTexturePro(sprite,src,dest,{0,0},0,WHITE);
     
-    
-        DrawRectangleLines(pos.x,pos.y,size,size,RED);
+    // DrawRectangleLines(pos.x,pos.y,48,48,RED);
     
 }
 
-void UpdateEnemyBehavior(std::vector<Enemy*> &enemyList, int enemyCount)
+void UpdateEnemyBehavior(std::vector<Enemy*> &enemyList, int enemyCount,Texture2D sprite)
 {
     // Add new enemies if needed
     if (enemyList.size() < enemyCount)
     {
-        enemyList.push_back(PopulateEnemies());
+        enemyList.push_back(PopulateEnemies(sprite));
     }
 
     // Iterate over the enemy list and update behavior
@@ -52,7 +74,7 @@ void UpdateEnemyBehavior(std::vector<Enemy*> &enemyList, int enemyCount)
 }
 
 
-Enemy* PopulateEnemies()
+Enemy* PopulateEnemies(Texture2D sprite)
 {
-    return new Enemy(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-48});
+    return new Enemy(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-48},sprite);
 }

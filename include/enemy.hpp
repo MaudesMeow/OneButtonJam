@@ -21,9 +21,11 @@ class Enemy
         float waitTime;
         float counter;
 
+        Texture2D sprite;
+
 
         Enemy() : pos({0,0}) {}
-        Enemy(Vector2 pos)
+        Enemy(Vector2 pos, Texture2D sprite)
         {
             this->pos = pos;
             size = 48;
@@ -31,12 +33,13 @@ class Enemy
             isAlive = true;
             waitTime = GetRandomValue(0,10);
             counter = 0;
+            this->sprite = sprite;
         }
 
         void DrawEnemies();
     };
 
-void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount);
-Enemy* PopulateEnemies();
+void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D sprite);
+Enemy* PopulateEnemies(Texture2D sprite);
 
 #endif

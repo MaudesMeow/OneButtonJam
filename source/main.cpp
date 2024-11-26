@@ -38,6 +38,7 @@ vector<Ammo> ammoCount;
 Player player;
 vector<Bonus*> bonusList;
 vector<Enemy*> enemyList;
+Texture2D enemyOne;
 
 
 
@@ -68,7 +69,8 @@ void Init(void)
 
 
     Texture2D playerSprite = LoadTexture("assets/player-bug.png");
-    player = Player(playerSprite, {(float)GetScreenWidth()/2,(float)GetScreenHeight()-playerSprite.height*2-8});
+    enemyOne = LoadTexture("assets/enemy-one.png");
+    player = Player(playerSprite, {(float)GetScreenWidth()/2,(float)GetScreenHeight()-playerSprite.height*2-32});
     
 
     InitStars(stars,starCount); 
@@ -81,7 +83,7 @@ void Update(void)
     UpdateStars(stars,starCount);
     player.HandleInput();
     UpdateBonusBehavior(bonusList, &player);
-    UpdateEnemyBehavior(enemyList,14);
+    UpdateEnemyBehavior(enemyList,32,enemyOne);
 
 
 

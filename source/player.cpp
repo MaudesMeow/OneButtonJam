@@ -42,6 +42,11 @@ void Player::HandleInput()
 
     }
 
+    if (IsKeyUp(KEY_SPACE))
+    {
+        
+    }
+
     if (IsKeyDown(KEY_SPACE))
     {
         if (speed < 480)
@@ -77,17 +82,17 @@ void Player::AnimatePlayer()
 
         // Draw the triangle
         DrawTriangleLines(p1, p2, p3, WHITE);
-        DrawRectangleLines(lastX-2,bulletPos.y, 4,4,ColorAlpha((Color){255,255,255},0.8));
+        DrawRectangleLines(lastX-2,bulletPos.y, 4,4,ColorAlpha(Color{255,255,255},0.8));
         
-        DrawRectangleLines(lastX-2,bulletPos.y+2, 4,4,ColorAlpha((Color){255,255,255},0.5));
+        DrawRectangleLines(lastX-2,bulletPos.y+2, 4,4,ColorAlpha(Color{255,255,255},0.5));
         
-        DrawRectangleLines(lastX-2,bulletPos.y+4, 4,4,ColorAlpha((Color){255,255,255},0.3));
+        DrawRectangleLines(lastX-2,bulletPos.y+4, 4,4,ColorAlpha(Color{255,255,255},0.3));
         
-        DrawRectangleLines(lastX-2,bulletPos.y+6, 4,4,ColorAlpha((Color){255,255,255},0.15));
-        DrawRectangleLines(lastX-2,bulletPos.y+7, 4,4,ColorAlpha((Color){255,255,255},0.10));
-        DrawRectangleLines(lastX-2,bulletPos.y+8, 4,4,ColorAlpha((Color){255,255,255},0.05));
-        DrawRectangleLines(lastX-2,bulletPos.y+9, 4,4,ColorAlpha((Color){255,255,255},0.03));
-        DrawRectangleLines(lastX-2,bulletPos.y+10, 4,4,ColorAlpha((Color){255,255,255},0.01));
+        DrawRectangleLines(lastX-2,bulletPos.y+6, 4,4,ColorAlpha(Color{255,255,255},0.15));
+        DrawRectangleLines(lastX-2,bulletPos.y+7, 4,4,ColorAlpha(Color{255,255,255},0.10));
+        DrawRectangleLines(lastX-2,bulletPos.y+8, 4,4,ColorAlpha(Color{255,255,255},0.05));
+        DrawRectangleLines(lastX-2,bulletPos.y+9, 4,4,ColorAlpha(Color{255,255,255},0.03));
+        DrawRectangleLines(lastX-2,bulletPos.y+10, 4,4,ColorAlpha(Color{255,255,255},0.01));
 
         
         
