@@ -30,12 +30,12 @@ void Enemy::DrawEnemies()
     
 }
 
-void UpdateEnemyBehavior(std::vector<Enemy*> &enemyList, int enemyCount,Texture2D sprite)
+void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D sprite)
 {
     // Add new enemies if needed
     if (enemyList.size() < enemyCount)
     {
-        enemyList.push_back(PopulateEnemies(sprite));
+        enemyList.push_back(PopulateEnemies(enemyList,sprite));
     }
 
     // Iterate over the enemy list and update behavior
@@ -74,7 +74,30 @@ void UpdateEnemyBehavior(std::vector<Enemy*> &enemyList, int enemyCount,Texture2
 }
 
 
-Enemy* PopulateEnemies(Texture2D sprite)
+Enemy* PopulateEnemies(vector<Enemy*> &enemyList, Texture2D sprite)
 {
-    return new Enemy(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-48},sprite);
+    int xPos, yPos;
+    bool positionValid;
+
+    do {
+        
+        xPos = GetRandomValue(92, GetScreenWidth() - 92);
+        yPos = GetRandomValue(-96, -48);
+        positionValid = true; // Assume position is valid
+
+        
+        for (Enemy* enemy : enemyList)
+        {
+            if ((xPos > enemy->pos.x && xPos <= enemy->pos.x + 48) &&
+                (yPos > enemy->pos.y && yPos <= enemy->pos.y + 48))
+            {
+                positionValid = false; 
+                break; 
+            }
+        }
+    } while (!positionValid); 
+
+    
+    return new Enemy(Vector2{(float)xPos, (float)yPos}, sprite);
 }
+

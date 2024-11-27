@@ -70,7 +70,7 @@ void Init(void)
 
     Texture2D playerSprite = LoadTexture("assets/player-bug.png");
     enemyOne = LoadTexture("assets/enemy-one.png");
-    player = Player(playerSprite, {(float)GetScreenWidth()/2,(float)GetScreenHeight()-playerSprite.height*2-32});
+    player = Player(playerSprite, {(float)GetScreenWidth()/2,(float)GetScreenHeight()-64});
     
 
     InitStars(stars,starCount); 

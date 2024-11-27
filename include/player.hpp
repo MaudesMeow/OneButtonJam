@@ -14,6 +14,8 @@ class Player
         int ammoCount;
         bool canShoot;
         vector<Ammo*> ammoInventory;
+        Rectangle hitBox;
+        bool hasTeleported;
 
         Player() : playerSprite(), pos({0, 0}) {}
         Player(Texture2D playerSprite, Vector2 pos)
@@ -24,6 +26,8 @@ class Player
             speed = 160;
             ammoCount = 2;
             canShoot = true;
+            hitBox = Rectangle{pos.x,pos.y,32,32};
+            hasTeleported = false;
         }
 
 

@@ -90,7 +90,21 @@ void UpdateBonusBehavior(std::vector<Bonus*> &bonusList, Player *player)
                 bonus->isValid = false;
             }
             break;
-        
+        case TELEPORTER:
+            if (CheckCollisionCircleRec(bonus->pos, bonus->radius, player->hitBox))
+            {
+                if (!player->hasTeleported)
+                {
+                    Vector2 tempBonus = bonusList[GetRandomValue(0, (bonusList.size()) - 1)]->pos;
+                    player->pos = tempBonus;
+                    player->hitBox.x = player->pos.x;
+                    player->hitBox.y = player->pos.y;
+                    player->hasTeleported = true;  // Mark as teleported
+                }
+            }
+            
+            break;
+
         default:
             break;
         }

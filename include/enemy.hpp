@@ -40,6 +40,6 @@ class Enemy
     };
 
 void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D sprite);
-Enemy* PopulateEnemies(Texture2D sprite);
+Enemy* PopulateEnemies(vector<Enemy*> &enemyList,Texture2D sprite);
 
 #endif

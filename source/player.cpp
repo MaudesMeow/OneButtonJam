@@ -21,6 +21,8 @@ void Player::HandleInput()
         
     }
     pos.x += (speed*GetFrameTime() * direction);
+    hitBox.x = pos.x;
+    hitBox.y = pos.y;
     if (IsKeyPressed(KEY_SPACE) )
     {
         direction *= -1;
@@ -61,6 +63,14 @@ void Player::HandleInput()
     }
 
     pos.x += (160*GetFrameTime() * direction);
+    if (pos.y < GetScreenHeight() - 64)
+    {
+        pos.y += (160*GetFrameTime());
+    }
+    else 
+    {
+        hasTeleported = false;
+    }
     if (pos.x <= 96)
     {
         direction = 1;

@@ -16,6 +16,7 @@ public:
     Vector2 pos,p1,p2,p3;
     BonusType type;
     bool isValid;
+    int radius;
 
     
     virtual ~Bonus() = default;
@@ -58,6 +59,7 @@ public:
 class TeleporterBonus : public Bonus
 {
 public:
+
     TeleporterBonus()
     {
         type = TELEPORTER;
@@ -69,6 +71,7 @@ public:
         type = TELEPORTER;
         this->pos = pos;
         isValid = true;
+        radius = 20;
 
     }
 
