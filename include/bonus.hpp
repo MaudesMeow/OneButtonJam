@@ -17,6 +17,7 @@ public:
     BonusType type;
     bool isValid;
     int radius;
+    Rectangle hitBox;
 
     
     virtual ~Bonus() = default;
@@ -39,6 +40,7 @@ public:
     AmmosBonus(Vector2 trianglePos) : Bonus()
     {
         type = AMMO;
+        hitBox = Rectangle{pos.x-16,pos.y,32,32};
         
         p1 = {trianglePos.x -16, trianglePos.y + 32};
         p2 = {trianglePos.x +16, trianglePos.y + 32};

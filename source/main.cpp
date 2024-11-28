@@ -39,6 +39,9 @@ Player player;
 vector<Bonus*> bonusList;
 vector<Enemy*> enemyList;
 Texture2D enemyOne;
+Texture2D handEnemy;
+
+int score = 0;
 
 
 
@@ -70,6 +73,7 @@ void Init(void)
 
     Texture2D playerSprite = LoadTexture("assets/player-bug.png");
     enemyOne = LoadTexture("assets/enemy-one.png");
+    handEnemy = LoadTexture("assets/big-hand.png");
     player = Player(playerSprite, {(float)GetScreenWidth()/2,(float)GetScreenHeight()-64});
     
 
@@ -83,7 +87,9 @@ void Update(void)
     UpdateStars(stars,starCount);
     player.HandleInput();
     UpdateBonusBehavior(bonusList, &player);
-    UpdateEnemyBehavior(enemyList,32,enemyOne);
+    UpdateEnemyBehavior(enemyList,24,enemyOne,handEnemy);
+
+    score += 1;
 
 
 
@@ -97,6 +103,7 @@ void Draw(void)
     
     DrawStars(stars,starCount);
     DrawText("AMMO: ",8,0,24,WHITE);
+    DrawText(TextFormat("SCORE:\n%i",score),8,64,22,WHITE);
     player.AnimatePlayer();
    
     
