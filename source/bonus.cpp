@@ -49,7 +49,7 @@ void TeleporterBonus::DrawBonus()
 Bonus* PopulateBonuses()
 {
 
-    int bonusOption = GetRandomValue(1,2);
+    int bonusOption = GetRandomValue(1,1);
     switch (bonusOption)
     {
     case 1:

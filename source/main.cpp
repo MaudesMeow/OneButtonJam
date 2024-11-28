@@ -106,7 +106,7 @@ void Draw(void)
     DrawText("AMMO: ",8,0,24,WHITE);
     DrawText(TextFormat("SCORE:\n%i",score),8,64,22,WHITE);
     player.AnimatePlayer();
-   
+    AnimateAmmo(player.ammoInventory);
     
 
     for (Bonus *bonus : bonusList)

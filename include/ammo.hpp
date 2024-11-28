@@ -37,7 +37,7 @@ class Ammo
 
 void DisplayAmmo(int ammoCount);
 
-void AnimateAmmo(vector<Ammo*> ammo);  // Display function for side of screen to let player know how much ammo they have 
+void AnimateAmmo(vector<Ammo*> &ammo);  // Display function for side of screen to let player know how much ammo they have 
 void UpdateAmmoBehavior();
 Ammo* PopulateAmmo();
 

@@ -18,27 +18,6 @@ void Player::HandleInput()
     if (IsKeyPressed(KEY_SPACE) )
     {
         direction *= -1;
-
-        
-        // if (GetAmmoCount() < 0){canShoot = false;};
-        // if (canShoot)
-        // {
-            
-        //     if (bulletfired == false)
-        //     {
-        //     (SetAmmoCount(GetAmmoCount()-1));
-        //     lastX = (direction < 0) ? pos.x : pos.x + 32;
-            
-        //     bulletfired = true;
-        //     }
-        // }
-
-
-    }
-
-    if (IsKeyUp(KEY_SPACE))
-    {
-        
     }
 
     if (IsKeyDown(KEY_SPACE))
@@ -55,7 +34,7 @@ void Player::HandleInput()
     }
 
     pos.x += (160*GetFrameTime() * direction);
-    if (pos.y < GetScreenHeight() - 64)
+    if (pos.y < GetScreenHeight() - 128)
     {
         pos.y += (160*GetFrameTime());
     }
@@ -76,18 +55,7 @@ void Player::HandleInput()
 void Player::AnimatePlayer()
 {
 
-    if (bulletfired)
-    {
-        Vector2 p1 = { (float)lastX - 4, bulletPos.y };
-        Vector2 p2 = { (float)lastX + 4, bulletPos.y };
-        Vector2 p3 = { (float)lastX, bulletPos.y - 16 };
 
-        // Draw the triangle
-
-
-        
-        
-    }
     int numFrames = 4;
     int frameWidth = playerSprite.width / numFrames; // Width of a single frame
     int frameHeight = playerSprite.height; // Assuming all frames have the same height
@@ -125,11 +93,27 @@ void Player::BulletBehavior()
     for (auto it = ammoInventory.begin(); it != ammoInventory.end(); )
     {
         Ammo* ammo = *it;
-        if (ammo->hasFired){ammo->SetAmmoPos(pos,Vector2{(float)lastX - 4, pos.y},direction);}
+
+        if (IsKeyPressed(KEY_SPACE) && GetAmmoCount() >0 && canShoot)
+        {
+            ammo->hasFired = true;
+            canShoot = false;
+            SetAmmoCount(GetAmmoCount()-1);
+        }
+        else{
+            canShoot = true;
+        }
+
+
+        if (!ammo->hasFired)
+        {
+            ammo->SetAmmoPos(pos,Vector2{(float)lastX + 4, pos.y},direction);
+            ammo->SetLastX(lastX);
+        }
         else{ammo->bulletPos.y -= (ammo->speed*GetFrameTime());}
         
         
-        if (!ammo->hasCollided)
+        if (ammo->hasCollided || ammo->bulletPos.y <= 0)
         {
             // Delete the enemy object to prevent memory leaks
             delete ammo;  
@@ -142,12 +126,16 @@ void Player::BulletBehavior()
             // Increment the iterator if the enemy is still alive
             ++it;
         }
+        
     }
+
+   
 
 }
 
 void Player::UpdatePlayerBehavior()
 {
     HandleInput();
+    BulletBehavior();
    
  }
