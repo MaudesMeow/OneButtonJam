@@ -3,43 +3,35 @@
 
 bool bulletfired = false;
 Vector2 bulletPos;
-int lastX;
+
+
 
 void Player::HandleInput()
 {
-    if (!bulletfired)
-    {
-        bulletPos = pos;
-    } else
-    {
-        
-        bulletPos.y -= (680*GetFrameTime());
-        if (bulletPos.y < 0)
-        {
-            bulletfired = false;
-        }
-        
-    }
+
     pos.x += (speed*GetFrameTime() * direction);
+    
     hitBox.x = pos.x;
     hitBox.y = pos.y;
+
+
     if (IsKeyPressed(KEY_SPACE) )
     {
         direction *= -1;
 
         
-        if (GetAmmoCount() < 0){canShoot = false;};
-        if (canShoot)
-        {
+        // if (GetAmmoCount() < 0){canShoot = false;};
+        // if (canShoot)
+        // {
             
-            if (bulletfired == false)
-            {
-            (SetAmmoCount(GetAmmoCount()-1));
-            lastX = (direction < 0) ? pos.x : pos.x + 32;
+        //     if (bulletfired == false)
+        //     {
+        //     (SetAmmoCount(GetAmmoCount()-1));
+        //     lastX = (direction < 0) ? pos.x : pos.x + 32;
             
-            bulletfired = true;
-            }
-        }
+        //     bulletfired = true;
+        //     }
+        // }
 
 
     }
@@ -91,18 +83,7 @@ void Player::AnimatePlayer()
         Vector2 p3 = { (float)lastX, bulletPos.y - 16 };
 
         // Draw the triangle
-        DrawTriangleLines(p1, p2, p3, WHITE);
-        DrawRectangleLines(lastX-2,bulletPos.y, 4,4,ColorAlpha(Color{255,255,255},0.8));
-        
-        DrawRectangleLines(lastX-2,bulletPos.y+2, 4,4,ColorAlpha(Color{255,255,255},0.5));
-        
-        DrawRectangleLines(lastX-2,bulletPos.y+4, 4,4,ColorAlpha(Color{255,255,255},0.3));
-        
-        DrawRectangleLines(lastX-2,bulletPos.y+6, 4,4,ColorAlpha(Color{255,255,255},0.15));
-        DrawRectangleLines(lastX-2,bulletPos.y+7, 4,4,ColorAlpha(Color{255,255,255},0.10));
-        DrawRectangleLines(lastX-2,bulletPos.y+8, 4,4,ColorAlpha(Color{255,255,255},0.05));
-        DrawRectangleLines(lastX-2,bulletPos.y+9, 4,4,ColorAlpha(Color{255,255,255},0.03));
-        DrawRectangleLines(lastX-2,bulletPos.y+10, 4,4,ColorAlpha(Color{255,255,255},0.01));
+
 
         
         
@@ -131,6 +112,42 @@ void Player::AnimatePlayer()
 
     DrawTexturePro(playerSprite,src,dest,{0,0},0,WHITE);
 
+}
 
+
+void Player::BulletBehavior()
+{
+    if (ammoInventory.size() < ammoCount)
+    {
+        ammoInventory.push_back(PopulateAmmo());
+    }
+    
+    for (auto it = ammoInventory.begin(); it != ammoInventory.end(); )
+    {
+        Ammo* ammo = *it;
+        if (ammo->hasFired){ammo->SetAmmoPos(pos,Vector2{(float)lastX - 4, pos.y},direction);}
+        else{ammo->bulletPos.y -= (ammo->speed*GetFrameTime());}
+        
+        
+        if (!ammo->hasCollided)
+        {
+            // Delete the enemy object to prevent memory leaks
+            delete ammo;  
+            
+            
+            it = ammoInventory.erase(it);
+        }
+        else
+        {
+            // Increment the iterator if the enemy is still alive
+            ++it;
+        }
+    }
 
 }
+
+void Player::UpdatePlayerBehavior()
+{
+    HandleInput();
+   
+ }

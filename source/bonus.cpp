@@ -88,7 +88,7 @@ void UpdateBonusBehavior(std::vector<Bonus*> &bonusList, Player *player)
         case AMMO:
             if (CheckCollisionRecs(player->hitBox,bonus->hitBox))
             {
-                player->SetAmmoCount(2);
+                player->SetAmmoCount(3);
                 player->canShoot = true;
                 bonus->isValid = false;
             }

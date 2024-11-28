@@ -33,7 +33,7 @@ float posX = 0;
 int direction = 1;
 const int starCount =  2000;
 Stars stars[starCount];
-vector<Ammo> ammoCount;
+
 
 Player player;
 vector<Bonus*> bonusList;
@@ -85,7 +85,7 @@ void Init(void)
 void Update(void)
 {
     UpdateStars(stars,starCount);
-    player.HandleInput();
+    player.UpdatePlayerBehavior();
     UpdateBonusBehavior(bonusList, &player);
     UpdateEnemyBehavior(enemyList,24,enemyOne,handEnemy);
 
@@ -100,6 +100,7 @@ void Draw(void)
     ClearBackground(BLACK);
     
     DisplayAmmo(player.GetAmmoCount());
+    cout << "player get ammo is returning " << player.GetAmmoCount() << endl;
     
     DrawStars(stars,starCount);
     DrawText("AMMO: ",8,0,24,WHITE);
