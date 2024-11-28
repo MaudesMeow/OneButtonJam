@@ -3,7 +3,7 @@
 
 #include "globals.hpp"
 
-int ammoAmount = 0;
+static int ammoAmount = 0;
 
 class Ammo
 {
@@ -16,8 +16,8 @@ class Ammo
 
 void DisplayAmmo(int ammoAmount);  // Display function for side of screen to let player know how much ammo they have 
 void UpdateAmmoBehavior();
-void SetAmmoAmount(int amount){ammoAmount = amount;};
-int GetAmmoAmount(){return ammoAmount;};
+// void SetAmmoAmount(int amount){ammoAmount = amount;};
+// int GetAmmoAmount(){return ammoAmount;};
 
 
 
