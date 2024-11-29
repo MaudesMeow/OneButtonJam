@@ -94,26 +94,26 @@ void Player::BulletBehavior()
     {
         Ammo* ammo = *it;
 
-        if (IsKeyPressed(KEY_SPACE) && GetAmmoCount() >0 && canShoot)
-        {
-            ammo->hasFired = true;
-            canShoot = false;
-            SetAmmoCount(GetAmmoCount()-1);
-        }
-        else
+        if (shooterTimer > 0.3)
         {
             canShoot = true;
         }
 
-
-        if (!ammo->hasFired)
+        if (IsKeyPressed(KEY_SPACE) && GetAmmoCount() > 0 && canShoot and !ammo->hasFired )
         {
-            ammo->SetAmmoPos(pos,Vector2{(float)pos.x + 4, pos.y},direction);
+            SetAmmoCount(GetAmmoCount() - 1);
+            ammo->hasFired = true;
+            canShoot = false;
             
+            shooterTimer = 0;  // Reset timer only after firing
+            cout << "ammo fired " << endl;
+
         }
-        
-        
-        
+        shooterTimer += GetFrameTime();  // Increment timer outside of conditions
+
+    
+        ammo->SetAmmoPos(pos,direction);
+
         if (ammo->hasCollided || ammo->bulletPos.y <= 0)
         {
             // Delete the enemy object to prevent memory leaks

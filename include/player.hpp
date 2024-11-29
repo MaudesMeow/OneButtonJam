@@ -15,6 +15,7 @@ class Player
         vector<Ammo*> ammoInventory;
         Rectangle hitBox;
         bool hasTeleported;
+        float shooterTimer;
         
         int lastX;
         
@@ -26,10 +27,11 @@ class Player
             this->pos = pos;
             direction = 1;
             speed = 160;
-            ammoCount = 0;
+            ammoCount = 3;
             canShoot = true;
             hitBox = Rectangle{pos.x,pos.y,32,32};
             hasTeleported = false;
+            shooterTimer = 0;
             lastX = 0;
         }
         void AnimatePlayer();

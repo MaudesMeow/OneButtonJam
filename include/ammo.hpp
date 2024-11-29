@@ -25,21 +25,13 @@ class Ammo
 
         
         
-        void SetAmmoPos(Vector2 pos, Vector2 point1,int direction)
-        {
-            bulletPos = pos;
-            p1 = point1;
-            
-
-        };
-        
-
+        void SetAmmoPos(Vector2 pos,int direction);
     
 
 };
 
 void DisplayAmmo(int ammoCount);
-void UpdateAmmoPos(Ammo* &ammo);
+
 void AnimateAmmo(vector<Ammo*> &ammo);  // Display function for side of screen to let player know how much ammo they have 
 void UpdateAmmoBehavior();
 Ammo* PopulateAmmo();
