@@ -100,17 +100,18 @@ void Player::BulletBehavior()
             canShoot = false;
             SetAmmoCount(GetAmmoCount()-1);
         }
-        else{
+        else
+        {
             canShoot = true;
         }
 
 
         if (!ammo->hasFired)
         {
-            ammo->SetAmmoPos(pos,Vector2{(float)lastX + 4, pos.y},direction);
-            ammo->SetLastX(lastX);
+            ammo->SetAmmoPos(pos,Vector2{(float)pos.x + 4, pos.y},direction);
+            
         }
-        else{ammo->bulletPos.y -= (ammo->speed*GetFrameTime());}
+        
         
         
         if (ammo->hasCollided || ammo->bulletPos.y <= 0)
