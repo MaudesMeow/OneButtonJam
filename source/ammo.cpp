@@ -30,6 +30,8 @@ void Ammo::SetAmmoPos(Vector2 pos,int direction)
     if (!hasFired)
     {
         bulletPos = pos;
+        hitBox.x = bulletPos.x+8;
+        hitBox.y = bulletPos.y-16;
         p1.x = bulletPos.x+8;
         p1.y = bulletPos.y;
         p2.x = bulletPos.x + 24;
@@ -40,7 +42,8 @@ void Ammo::SetAmmoPos(Vector2 pos,int direction)
     else
     {
         bulletPos.y -= (speed*GetFrameTime());
-        
+        hitBox.x = bulletPos.x+8;
+        hitBox.y = bulletPos.y-16;
         p1.x = bulletPos.x+8;
         p1.y = bulletPos.y;
         p2.x = bulletPos.x + 24;
@@ -66,7 +69,7 @@ void AnimateAmmo(vector<Ammo*> &ammo) // Display function for side of screen to 
                 if (am->hasFired)
                 {
 
-                
+                    DrawRectangleLinesEx(am->hitBox,1,RED);
                     DrawTriangleLines(am->p1, am->p2, am->p3, WHITE);
                     DrawRectangleLines(am->bulletPos.x+14,am->bulletPos.y+16, 4,4,ColorAlpha(Color{255,255,255},1.0));
                     
@@ -83,6 +86,7 @@ void AnimateAmmo(vector<Ammo*> &ammo) // Display function for side of screen to 
                 else
                 {
                     // cout << " drawing " << i << endl;
+                    DrawRectangleLinesEx(am->hitBox,1,RED);
                     DrawTriangleLines(am->p1, am->p2, am->p3, WHITE);
                     
                 }

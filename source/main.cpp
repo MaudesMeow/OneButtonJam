@@ -87,7 +87,7 @@ void Update(void)
     UpdateStars(stars,starCount);
     player.UpdatePlayerBehavior();
     UpdateBonusBehavior(bonusList, &player);
-    UpdateEnemyBehavior(enemyList,24,enemyOne,handEnemy);
+    UpdateEnemyBehavior(enemyList,24,enemyOne,handEnemy,player.ammoInventory);
 
     score += 1;
 

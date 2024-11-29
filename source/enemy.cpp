@@ -2,6 +2,9 @@
 
 void Enemy::DrawEnemies()
 {
+    Rectangle dest, src;
+    Vector2 origin;
+
     int numFrames = 4;
     int frameWidth = sprite.width / numFrames; // Width of a single frame
     int frameHeight = sprite.height; // Assuming all frames have the same height
@@ -10,7 +13,7 @@ void Enemy::DrawEnemies()
     float frameTime = 0.3f; // Time per frame in seconds 
     int currentFrame = static_cast<int>(GetTime() / frameTime) % numFrames;
 
-    Rectangle src = 
+    src = 
     {
         (float)(frameWidth * currentFrame), // X position of the current frame
         0, // Y position of the current frame (assuming a single row of frames)
@@ -22,31 +25,47 @@ void Enemy::DrawEnemies()
     case FAST:
             frameWidth = (float)frameWidth *2; // Width of the drawn framed)
             frameHeight =(float)frameHeight *2; // Height of the drawn frame (scaled)
+            dest = 
+            {
+                pos.x, // X position on the screen
+                pos.y, // Y position on the screen
+                (float)frameWidth, // Width of the drawn framed)
+                (float)frameHeight // Height of the drawn frame (scaled)
+            };
+            origin = 
+            {
+                dest.width / 2.0f, // X offset to the center of the destination rectangle
+                dest.height / 2.0f // Y offset to the center of the destination rectangle
+            };
+
         break;
     
     case AVERAGE:
             frameWidth = (float)frameWidth *4; // Width of the drawn framed)
             frameHeight =(float)frameHeight *4; // Height of the drawn frame (scaled)
+            dest = 
+            {
+                pos.x, // X position on the screen
+                pos.y, // Y position on the screen
+                (float)frameWidth, // Width of the drawn framed)
+                (float)frameHeight // Height of the drawn frame (scaled)
+            };
+            origin = {0,0};
+
         break;
     default:
         break;
 
     }
-    Rectangle dest = 
-    {
-        pos.x, // X position on the screen
-        pos.y, // Y position on the screen
-        (float)frameWidth, // Width of the drawn framed)
-        (float)frameHeight // Height of the drawn frame (scaled)
-    };
 
-    DrawTexturePro(sprite,src,dest,{0,0},0,WHITE);
+    DrawTexturePro(sprite,src,dest,origin,rotation,WHITE);
+    
     
     DrawRectangleLinesEx(hitBox,1,RED);
     
 }
 
-void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D eyeSprite, Texture2D handSprite)
+void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D eyeSprite, Texture2D handSprite, vector<Ammo*> &ammo)
 {
     // Add new enemies if needed
     if (enemyList.size() < enemyCount)
@@ -59,12 +78,38 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D eye
     {
         Enemy* enemy = *it;
         enemy->counter += GetFrameTime();
+        enemy->directionTimer += GetFrameTime();
         // Update enemy position
-        if (enemy->counter > enemy->waitTime)
+
+        switch (enemy->type)
         {
-            enemy->pos.y += (enemy->speed * GetFrameTime());
-            enemy->hitBox.x = enemy->pos.x;
-            enemy->hitBox.y = enemy->pos.y;
+        case FAST:
+            if (enemy->counter > enemy->waitTime)
+            {
+                if (enemy->directionTimer > 0.5)
+                {
+                    enemy->direction *= -1;
+                    enemy->rotation = (enemy->direction > 0) ?  enemy->rotation = -45 : enemy->rotation = 45 ;
+
+                    enemy->directionTimer = 0;
+                }
+                enemy->pos.y += (enemy->speed * GetFrameTime());
+                enemy->pos.x += (enemy->speed*enemy->direction*GetFrameTime());
+                enemy->hitBox.x = enemy->pos.x - 12;
+                enemy->hitBox.y = enemy->pos.y -16;
+            }
+            break;
+        case AVERAGE:
+            if (enemy->counter > enemy->waitTime)
+            {
+                enemy->pos.y += (enemy->speed * GetFrameTime());
+                enemy->hitBox.x = enemy->pos.x;
+                enemy->hitBox.y = enemy->pos.y;
+            }
+            break;
+        
+        default:
+            break;
         }
 
 
@@ -72,6 +117,15 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D eye
         if (enemy->pos.y > GetScreenHeight()) 
         {
             enemy->isAlive = false;
+        }
+
+        for (Ammo *ammo : ammo)
+        {
+            if (CheckCollisionRecs(ammo->hitBox,enemy->hitBox))
+            {
+                enemy->isAlive = false;
+                ammo->hasCollided = true;
+            }
         }
 
         // Remove dead enemies from the list

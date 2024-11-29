@@ -2,6 +2,7 @@
 #define ENEMY_HEADER
 
 #include "globals.hpp"
+#include "ammo.hpp"
 
 enum EnemyType
 {
@@ -22,6 +23,9 @@ class Enemy
         float counter;
         Rectangle hitBox;
         float speed;
+        int direction;
+        float directionTimer;
+        int rotation;
 
         Texture2D sprite;
 
@@ -34,6 +38,8 @@ class Enemy
 class EyeEnemy : public Enemy
 {
     public:
+
+        
         EyeEnemy() : Enemy()
         {
             pos = {0,0};
@@ -48,7 +54,11 @@ class EyeEnemy : public Enemy
             counter = 0;
             this->sprite = sprite;
             hitBox = Rectangle{pos.x,pos.y,32,32};
-            speed = 480;
+            speed = 320;
+            direction = 1;
+            directionTimer =0;
+            rotation = 45;
+
         }
 
 };
@@ -71,10 +81,11 @@ class HandEnemy : public Enemy
             this->sprite = sprite;
             hitBox = Rectangle{pos.x,pos.y,64,64};
             speed = 240;
+            rotation = 0;
         }
 };
 
-void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D eyeSprite, Texture2D handSprite);
+void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D eyeSprite, Texture2D handSprite,vector<Ammo*> &ammo);
 Enemy* PopulateEnemies(vector<Enemy*> &enemyList, Texture2D eyeSprite, Texture2D handSprite);
 
 #endif
