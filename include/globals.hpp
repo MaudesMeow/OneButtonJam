@@ -14,4 +14,8 @@ using namespace std;
 #define BASE_WIDTH 400
 #define BASE_HEIGHT 400
 
+
+
+extern float score;
+
 #endif

@@ -90,16 +90,13 @@ void Update(void)
 {
 
     score += 0.25;
-    int scorevalue = floor(score);
-    cout << "score is " << floor(score) << endl;
+   
+    player.SetPlayerScore((int)floor(score));
+    
     UpdateStars(stars,starCount);
     player.UpdatePlayerBehavior();
     UpdateBonusBehavior(bonusList, &player);
-    UpdateEnemyBehavior(enemyList,scorevalue,enemyOne,handEnemy,player.ammoInventory);
-
-    
-
-
+    UpdateEnemyBehavior(enemyList,&player,enemyOne,handEnemy,player.ammoInventory);
 
 }
 // ---------------------------------------------------------------------------Draw FUNCTION
@@ -113,7 +110,7 @@ void Draw(void)
     DrawStars(stars,starCount);
     // DrawText("AMMO: ",8,0,24,WHITE);
     DrawTextEx(importedFont,"AMMO",{8,2},24,4,WHITE);
-    DrawTextEx(importedFont,TextFormat("SCORE\n\n%d", (int)floor(score)),{8,64},20,2,WHITE);
+    DrawTextEx(importedFont,TextFormat("SCORE\n\n%i%",player.GetPlayerScore()),{8,64},20,2,WHITE);
     // DrawText(TextFormat("SCORE:\n\n%d", (int)floor(score)), 8, 64, 22, WHITE);
     player.AnimatePlayer();
     AnimateAmmo(player.ammoInventory);

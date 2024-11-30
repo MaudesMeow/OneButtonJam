@@ -99,7 +99,7 @@ void Player::BulletBehavior()
             canShoot = true;
         }
 
-        if (IsKeyPressed(KEY_SPACE) && GetAmmoCount() > 0 && canShoot and !ammo->hasFired )
+        if (IsKeyPressed(KEY_SPACE) && GetAmmoCount() > 0 && canShoot && !ammo->hasFired )
         {
             SetAmmoCount(GetAmmoCount() - 1);
             ammo->hasFired = true;

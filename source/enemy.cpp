@@ -65,10 +65,11 @@ void Enemy::DrawEnemies()
     
 }
 
-void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int score,Texture2D eyeSprite, Texture2D handSprite, vector<Ammo*> &ammo)
+void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eyeSprite, Texture2D handSprite, vector<Ammo*> &ammo)
 {
     int enemyCount = 0;
-    if (score < 1000)
+    
+    if (player->score < 1000)
     {
         enemyCount = 12;
     }
@@ -79,7 +80,7 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int score,Texture2D eyeSprit
 
     if (enemyList.size() < enemyCount)
     {
-        enemyList.push_back(PopulateEnemies(enemyList,eyeSprite,handSprite,score));
+        enemyList.push_back(PopulateEnemies(enemyList,eyeSprite,handSprite,player->score));
     }
 
     // Iterate over the enemy list and update behavior
@@ -131,6 +132,12 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int score,Texture2D eyeSprit
         if (enemy->pos.y > GetScreenHeight()) 
         {
             enemy->isAlive = false;
+        }
+
+        if (CheckCollisionRecs(player->hitBox,enemy->hitBox))
+        {
+            score = 0;
+            player->SetPlayerScore(0);
         }
 
         for (Ammo *ammo : ammo)

@@ -16,6 +16,7 @@ class Player
         Rectangle hitBox;
         bool hasTeleported;
         float shooterTimer;
+        int score;
         
         int lastX;
         
@@ -38,6 +39,8 @@ class Player
         void HandleInput();
         int GetAmmoCount(){return ammoCount;};
         void SetAmmoCount(int amount){ammoCount = amount;};
+        void SetPlayerScore(int newScore){score = newScore;};
+        int GetPlayerScore(){return score;};
         void UpdatePlayerBehavior();
 
     private:
