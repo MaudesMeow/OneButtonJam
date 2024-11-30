@@ -17,8 +17,7 @@ class Player
         bool hasTeleported;
         float shooterTimer;
         int score;
-        
-        int lastX;
+        bool isReady;
         
 
         Player() : playerSprite(), pos({0, 0}) {}
@@ -33,7 +32,7 @@ class Player
             hitBox = Rectangle{pos.x,pos.y,32,32};
             hasTeleported = false;
             shooterTimer = 0;
-            lastX = 0;
+            isReady = false;
         }
         void AnimatePlayer();
         void HandleInput();

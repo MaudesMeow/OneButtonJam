@@ -1,5 +1,11 @@
 #include "enemy.hpp"
 
+int smallEnemyCounter =0;
+int smallEnemyAmount =0; 
+int mediumEnemyCounter =0;
+int mediumEnemyAmount=0;
+int enemyCount = 0;
+
 void Enemy::DrawEnemies()
 {
     Rectangle dest, src;
@@ -67,15 +73,40 @@ void Enemy::DrawEnemies()
 
 void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eyeSprite, Texture2D handSprite, vector<Ammo*> &ammo)
 {
-    int enemyCount = 0;
+    // ------------------------------------------------------------------------------------------- HOW MANY ENEMIES TO POPULATE
+    enemyCount = 0;
     
-    if (player->score < 1000)
+    if (player->score < 500)
     {
-        enemyCount = 12;
+        enemyCount = 8;
+        smallEnemyAmount = 8;
+        mediumEnemyAmount = 0;
+        mediumEnemyCounter =0;
+        smallEnemyCounter = 0;
+    }
+    else if (player->score >= 500 && player->score < 1000)
+    {
+        enemyCount = 16;
+        smallEnemyAmount = 14;
+        mediumEnemyAmount = 2;
+    }
+    else if(player->score >= 1000 && player->score < 1500)
+    {
+        enemyCount = 24;
+        smallEnemyAmount = 16;
+        mediumEnemyAmount = 8;
+    }
+    else if(player->score >= 1500 && player->score < 2000)
+    {
+        enemyCount = 32;
+        smallEnemyAmount = 18;
+        mediumEnemyAmount = 14;
     }
     else
     {
-        enemyCount = 24;
+        enemyCount = 40;
+        smallEnemyAmount = 20;
+        mediumEnemyAmount = 20;
     }
 
     if (enemyList.size() < enemyCount)
@@ -83,13 +114,13 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
         enemyList.push_back(PopulateEnemies(enemyList,eyeSprite,handSprite,player->score));
     }
 
-    // Iterate over the enemy list and update behavior
+    // ------------------------------------------------------------------------------------------- Iterate over the enemy list and update behavior
     for (auto it = enemyList.begin(); it != enemyList.end(); )
     {
         Enemy* enemy = *it;
         enemy->counter += GetFrameTime();
         enemy->directionTimer += GetFrameTime();
-        // Update enemy position
+        // ------------------------------------------------------------------------------------------- Update enemy position
 
         switch (enemy->type)
         {
@@ -100,6 +131,7 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
                 {
                     enemy->direction *= -1;
                     enemy->directionTimer = 0;
+                    enemy->rotation *= -1;
                 }
                 if (enemy->directionTimer > 0.5)
                 {
@@ -128,18 +160,20 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
         }
 
 
-        // Check if the enemy is off-screen and mark it as dead
+        // -------------------------------------------------------------------------------------------  Check if the enemy is off-screen and mark it as dead
         if (enemy->pos.y > GetScreenHeight()) 
         {
             enemy->isAlive = false;
         }
-
+        // ------------------------------------------------------------------------------------------- CHECK IF COLLIDES WITH PLAYER
         if (CheckCollisionRecs(player->hitBox,enemy->hitBox))
         {
-            score = 0;
+            globalScore = 0;
             player->SetPlayerScore(0);
+            
+            
         }
-
+        // ------------------------------------------------------------------------------------------- CHECK IF ENEMY IS SHOT
         for (Ammo *ammo : ammo)
         {
             if (CheckCollisionRecs(ammo->hitBox,enemy->hitBox) && ammo->hasFired)
@@ -150,7 +184,14 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
 
                 if (enemy->hitCount <= 0)
                 {
+                    // cout << "player score is " << player->GetPlayerScore() << endl;
                     enemy->isAlive = false;
+                    if (enemy->type == FAST){player->SetPlayerScore(player->GetPlayerScore()+50);};
+                    if (enemy->type == AVERAGE){player->SetPlayerScore(player->GetPlayerScore()+100);};
+                    if (enemy->type == SLOW){player->SetPlayerScore(player->GetPlayerScore()+150);};
+                    
+                    // cout << "player score is " << player->GetPlayerScore() << endl;
+
                 }
 
 
@@ -160,6 +201,14 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
         // Remove dead enemies from the list
         if (!enemy->isAlive)
         {
+            if (enemy->type == FAST)
+            {
+                smallEnemyCounter--;
+            }
+            if (enemy->type == AVERAGE)
+            {
+                mediumEnemyCounter--;
+            }
             // Delete the enemy object to prevent memory leaks
             delete enemy;  
             
@@ -174,47 +223,46 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
     }
 }
 
-
+// ------------------------------------------------------------------------------------------- POPULATE ENEMIES FUNCTION
 Enemy* PopulateEnemies(vector<Enemy*> &enemyList, Texture2D eyeSprite, Texture2D handSprite,int score)
 {
     int xPos, yPos;
     bool positionValid;
     int enemyChoice = 0;
 
-    if (score < 2000)
+
+    enemyChoice = GetRandomValue(0,1);
+    
+
+    xPos = GetRandomValue(92, GetScreenWidth() - 92);
+    yPos = GetRandomValue(-128, -64);
+ 
+    if (smallEnemyCounter != smallEnemyAmount)
     {
-        enemyChoice = 0;
+        smallEnemyCounter++;
+        
+        return new EyeEnemy(Vector2{(float)xPos, (float)yPos}, eyeSprite);
+
+    }
+    else if (mediumEnemyCounter != mediumEnemyAmount)
+    {
+        mediumEnemyCounter++;
+        // cout << "going medium " << endl;
+        return new HandEnemy(Vector2{(float)xPos, (float)yPos}, handSprite);  
     }
     else
     {
+        // cout << "doing whatever! " << endl;
         enemyChoice = GetRandomValue(0,1);
-    }
-
-
-    do {
-        
-        xPos = GetRandomValue(92, GetScreenWidth() - 92);
-        yPos = GetRandomValue(-128, -64);
-        positionValid = true; // Assume position is valid
-
-        
-        // for (Enemy* enemy : enemyList)
-        // {
-        //      if (CheckCollisionRecs(Rectangle{(float)xPos,(float)yPos,32,32},enemy->hitBox))
-        //     {
-        //         positionValid = false; 
-        //         break; 
-        //     }
-        // }
-    } while (!positionValid); 
-
-    if (enemyChoice == 0)
-    {
-        return new EyeEnemy(Vector2{(float)xPos, (float)yPos}, eyeSprite);
-    }
-    else 
-    {
-        return new HandEnemy(Vector2{(float)xPos, (float)yPos}, handSprite);      
+        if (enemyChoice == 0)
+        {
+            
+            return new EyeEnemy(Vector2{(float)xPos, (float)yPos}, eyeSprite);
+        }
+        else 
+        {
+            return new HandEnemy(Vector2{(float)xPos, (float)yPos}, handSprite);      
+        }
     }
 
 }

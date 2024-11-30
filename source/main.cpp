@@ -44,7 +44,7 @@ Texture2D handEnemy;
 Font importedFont;
 
 
-float score = 0;
+float globalScore = 0;
 
 
 
@@ -89,14 +89,23 @@ void Init(void)
 void Update(void)
 {
 
-    score += 0.25;
-   
-    player.SetPlayerScore((int)floor(score));
+    if (!player.isReady)
+    {
+        UpdateStars(stars,starCount);
+        player.UpdatePlayerBehavior();
+    }
+    else
+    {
+        globalScore += 0.25;
     
-    UpdateStars(stars,starCount);
-    player.UpdatePlayerBehavior();
-    UpdateBonusBehavior(bonusList, &player);
-    UpdateEnemyBehavior(enemyList,&player,enemyOne,handEnemy,player.ammoInventory);
+        player.SetPlayerScore((int)floor(globalScore));
+        
+        UpdateStars(stars,starCount);
+        player.UpdatePlayerBehavior();
+        UpdateBonusBehavior(bonusList, &player);
+        UpdateEnemyBehavior(enemyList,&player,enemyOne,handEnemy,player.ammoInventory);
+    }
+
 
 }
 // ---------------------------------------------------------------------------Draw FUNCTION
@@ -104,27 +113,41 @@ void Draw(void)
 {
     ClearBackground(BLACK);
     
-    DisplayAmmo(player.GetAmmoCount());
+    
     // cout << "get ammo is returning " << player.GetAmmoCount() << endl;
     
     DrawStars(stars,starCount);
-    // DrawText("AMMO: ",8,0,24,WHITE);
-    DrawTextEx(importedFont,"AMMO",{8,2},24,4,WHITE);
-    DrawTextEx(importedFont,TextFormat("SCORE\n\n%i%",player.GetPlayerScore()),{8,64},20,2,WHITE);
-    // DrawText(TextFormat("SCORE:\n\n%d", (int)floor(score)), 8, 64, 22, WHITE);
-    player.AnimatePlayer();
-    AnimateAmmo(player.ammoInventory);
-    
 
-    for (Bonus *bonus : bonusList)
+    // --------------------------------------------------------------------- DRAW text     
+    if (!player.isReady)
     {
-        bonus->DrawBonus();
+        DrawTextEx(importedFont,"SPACE",{48,48},192,2,WHITE);
+
+        DrawTextEx(importedFont,"MOTH",{112,248 },192,2,WHITE);
+        player.AnimatePlayer();
     }
-    for (Enemy *enemy: enemyList)
+    else
     {
-        enemy->DrawEnemies();
+        DrawTextEx(importedFont,"AMMO",{8,2},24,4,WHITE);
+        DrawTextEx(importedFont,TextFormat("SCORE\n\n%i%",player.GetPlayerScore()),{8,64},20,2,WHITE);
+
+        player.AnimatePlayer();
+        AnimateAmmo(player.ammoInventory);
+        DisplayAmmo(player.GetAmmoCount());
+        
+
+        for (Bonus *bonus : bonusList)
+        {
+            bonus->DrawBonus();
+        }
+        for (Enemy *enemy: enemyList)
+        {
+            enemy->DrawEnemies();
+        }
+        
     }
-   
+
+  
 
 
 

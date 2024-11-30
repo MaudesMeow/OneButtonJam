@@ -67,15 +67,35 @@ Bonus* PopulateBonuses()
 
 void UpdateBonusBehavior(std::vector<Bonus*> &bonusList, Player *player)
 {
-    // Populate bonuses if needed
-    while (bonusList.size() < 3)
+    // ------------------------------------------------------------------------------------------- HOW MANY BONUSES TO POPULATE
+
+    int bonusCount = 0;
+    if (player->score < 500)
     {
-        Bonus* newBonus = PopulateBonuses();
-        if (newBonus)  // Ensure newBonus is not nullptr
-        {
-            bonusList.push_back(newBonus);
-        }
+        bonusCount = 1;
     }
+    else if (player->score >= 500 && player->score < 1000)
+    {
+        bonusCount = 2;
+    }
+    else if(player->score >= 1000 && player->score < 1500)
+    {
+        bonusCount = 4;
+    }
+    else if(player->score >= 1500 && player->score < 2000)
+    {
+        bonusCount = 8;
+    }
+    else
+    {
+        bonusCount = 16;
+    }
+
+    if (bonusList.size() < bonusCount)
+    {
+        bonusList.push_back(PopulateBonuses());
+    }
+
 
     // Iterate over the bonus list, handle validity, and update behavior in one pass
     for (auto it = bonusList.begin(); it != bonusList.end(); )

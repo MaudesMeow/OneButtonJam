@@ -8,48 +8,59 @@ Vector2 bulletPos;
 
 void Player::HandleInput()
 {
-
-    pos.x += (speed*GetFrameTime() * direction);
-    
-    hitBox.x = pos.x;
-    hitBox.y = pos.y;
-
-
-    if (IsKeyPressed(KEY_SPACE) )
+    if (!isReady)
     {
-        direction *= -1;
-    }
-
-    if (IsKeyDown(KEY_SPACE))
-    {
-        if (speed < 480)
+        pos.x = GetScreenWidth()/2 - 16;
+        if (IsKeyPressed(KEY_SPACE))
         {
-            speed += 16;
+            isReady = true;
+        }
+        
+    }
+    else
+    {
+        pos.x += (speed*GetFrameTime() * direction);
+        
+        hitBox.x = pos.x;
+        hitBox.y = pos.y;
+
+
+        if (IsKeyPressed(KEY_SPACE) )
+        {
+            direction *= -1;
         }
 
-    }
-    else 
-    {
-        speed = 160;
-    }
+        if (IsKeyDown(KEY_SPACE))
+        {
+            if (speed < 480)
+            {
+                speed += 16;
+            }
 
-    pos.x += (160*GetFrameTime() * direction);
-    if (pos.y < GetScreenHeight() - 128)
-    {
-        pos.y += (160*GetFrameTime());
+        }
+        else 
+        {
+            speed = 160;
+        }
+
+        pos.x += (160*GetFrameTime() * direction);
+        if (pos.y < GetScreenHeight() - 128)
+        {
+            pos.y += (160*GetFrameTime());
+        }
+        else 
+        {
+            hasTeleported = false;
+        }
+        if (pos.x <= 96)
+        {
+            direction = 1;
+        }
+        if (pos.x >= GetScreenWidth() -96-32)
+        {
+        direction = -1;
+        }  
     }
-    else 
-    {
-        hasTeleported = false;
-    }
-    if (pos.x <= 96)
-    {
-        direction = 1;
-    }
-    if (pos.x >= GetScreenWidth() -96-32)
-    {
-       direction = -1;
-    }  
 }
 
 void Player::AnimatePlayer()
@@ -106,7 +117,7 @@ void Player::BulletBehavior()
             canShoot = false;
             
             shooterTimer = 0;  // Reset timer only after firing
-            cout << "ammo fired " << endl;
+            
 
         }
         shooterTimer += GetFrameTime();  // Increment timer outside of conditions

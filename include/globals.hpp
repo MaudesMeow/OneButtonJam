@@ -16,6 +16,6 @@ using namespace std;
 
 
 
-extern float score;
+extern float globalScore;
 
 #endif
