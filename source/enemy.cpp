@@ -65,12 +65,21 @@ void Enemy::DrawEnemies()
     
 }
 
-void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D eyeSprite, Texture2D handSprite, vector<Ammo*> &ammo)
+void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int score,Texture2D eyeSprite, Texture2D handSprite, vector<Ammo*> &ammo)
 {
-    // Add new enemies if needed
+    int enemyCount = 0;
+    if (score < 1000)
+    {
+        enemyCount = 12;
+    }
+    else
+    {
+        enemyCount = 24;
+    }
+
     if (enemyList.size() < enemyCount)
     {
-        enemyList.push_back(PopulateEnemies(enemyList,eyeSprite,handSprite));
+        enemyList.push_back(PopulateEnemies(enemyList,eyeSprite,handSprite,score));
     }
 
     // Iterate over the enemy list and update behavior
@@ -86,6 +95,11 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D eye
         case FAST:
             if (enemy->counter > enemy->waitTime)
             {
+                if (enemy->pos.x <= 92 || enemy->pos.x >= GetScreenWidth()-92)
+                {
+                    enemy->direction *= -1;
+                    enemy->directionTimer = 0;
+                }
                 if (enemy->directionTimer > 0.5)
                 {
                     enemy->direction *= -1;
@@ -121,10 +135,18 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D eye
 
         for (Ammo *ammo : ammo)
         {
-            if (CheckCollisionRecs(ammo->hitBox,enemy->hitBox))
+            if (CheckCollisionRecs(ammo->hitBox,enemy->hitBox) && ammo->hasFired)
             {
-                enemy->isAlive = false;
+                
                 ammo->hasCollided = true;
+                enemy->SetHitCount(enemy->GetHitCount() - 1);
+
+                if (enemy->hitCount <= 0)
+                {
+                    enemy->isAlive = false;
+                }
+
+
             }
         }
 
@@ -146,11 +168,21 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D eye
 }
 
 
-Enemy* PopulateEnemies(vector<Enemy*> &enemyList, Texture2D eyeSprite, Texture2D handSprite)
+Enemy* PopulateEnemies(vector<Enemy*> &enemyList, Texture2D eyeSprite, Texture2D handSprite,int score)
 {
     int xPos, yPos;
     bool positionValid;
-    int enemyChoice = GetRandomValue(0,1);
+    int enemyChoice = 0;
+
+    if (score < 2000)
+    {
+        enemyChoice = 0;
+    }
+    else
+    {
+        enemyChoice = GetRandomValue(0,1);
+    }
+
 
     do {
         

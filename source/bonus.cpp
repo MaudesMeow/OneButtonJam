@@ -53,7 +53,7 @@ Bonus* PopulateBonuses()
     switch (bonusOption)
     {
     case 1:
-        return new AmmosBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-16});
+        return new AmmosBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),(float)GetRandomValue(-128,-16)});
         break;
     case 2: 
         return new TeleporterBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-16});

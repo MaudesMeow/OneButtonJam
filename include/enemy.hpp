@@ -26,13 +26,16 @@ class Enemy
         int direction;
         float directionTimer;
         int rotation;
+        int hitCount;
 
         Texture2D sprite;
 
         virtual ~Enemy() = default;
 
 
-        void DrawEnemies() ;
+        void DrawEnemies();
+        void SetHitCount(int count){hitCount = count;}
+        int GetHitCount(){return hitCount;}
     };
 
 class EyeEnemy : public Enemy
@@ -54,10 +57,11 @@ class EyeEnemy : public Enemy
             counter = 0;
             this->sprite = sprite;
             hitBox = Rectangle{pos.x,pos.y,32,32};
-            speed = 320;
+            speed = 280;
             direction = 1;
             directionTimer =0;
             rotation = 45;
+            hitCount = 1;
 
         }
 
@@ -82,10 +86,11 @@ class HandEnemy : public Enemy
             hitBox = Rectangle{pos.x,pos.y,64,64};
             speed = 240;
             rotation = 0;
+            hitCount = 2;
         }
 };
 
-void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int enemyCount,Texture2D eyeSprite, Texture2D handSprite,vector<Ammo*> &ammo);
-Enemy* PopulateEnemies(vector<Enemy*> &enemyList, Texture2D eyeSprite, Texture2D handSprite);
+void UpdateEnemyBehavior(vector<Enemy*> &enemyList, int score,Texture2D eyeSprite, Texture2D handSprite,vector<Ammo*> &ammo);
+Enemy* PopulateEnemies(vector<Enemy*> &enemyList, Texture2D eyeSprite, Texture2D handSprite, int score);
 
 #endif

@@ -41,7 +41,10 @@ vector<Enemy*> enemyList;
 Texture2D enemyOne;
 Texture2D handEnemy;
 
-int score = 0;
+Font importedFont;
+
+
+float score = 0;
 
 
 
@@ -75,6 +78,7 @@ void Init(void)
     enemyOne = LoadTexture("assets/enemy-one.png");
     handEnemy = LoadTexture("assets/big-hand.png");
     player = Player(playerSprite, {(float)GetScreenWidth()/2,(float)GetScreenHeight()-64});
+    importedFont = LoadFont("assets/Covenant5x5.ttf");
     
 
     InitStars(stars,starCount); 
@@ -84,12 +88,16 @@ void Init(void)
 // ---------------------------------------------------------------------------UPDATE FUNCTION
 void Update(void)
 {
+
+    score += 0.25;
+    int scorevalue = floor(score);
+    cout << "score is " << floor(score) << endl;
     UpdateStars(stars,starCount);
     player.UpdatePlayerBehavior();
     UpdateBonusBehavior(bonusList, &player);
-    UpdateEnemyBehavior(enemyList,24,enemyOne,handEnemy,player.ammoInventory);
+    UpdateEnemyBehavior(enemyList,scorevalue,enemyOne,handEnemy,player.ammoInventory);
 
-    score += 1;
+    
 
 
 
@@ -103,8 +111,10 @@ void Draw(void)
     // cout << "get ammo is returning " << player.GetAmmoCount() << endl;
     
     DrawStars(stars,starCount);
-    DrawText("AMMO: ",8,0,24,WHITE);
-    DrawText(TextFormat("SCORE:\n%i",score),8,64,22,WHITE);
+    // DrawText("AMMO: ",8,0,24,WHITE);
+    DrawTextEx(importedFont,"AMMO",{8,2},24,4,WHITE);
+    DrawTextEx(importedFont,TextFormat("SCORE\n\n%d", (int)floor(score)),{8,64},20,2,WHITE);
+    // DrawText(TextFormat("SCORE:\n\n%d", (int)floor(score)), 8, 64, 22, WHITE);
     player.AnimatePlayer();
     AnimateAmmo(player.ammoInventory);
     
