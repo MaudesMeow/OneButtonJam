@@ -71,7 +71,7 @@ void Enemy::DrawEnemies()
     
 }
 
-void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eyeSprite, Texture2D handSprite, vector<Ammo*> &ammo)
+void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eyeSprite, Texture2D handSprite, vector<Ammo*> &ammo,vector<Bonus*> &bonusList)
 {
     // ------------------------------------------------------------------------------------------- HOW MANY ENEMIES TO POPULATE
     enemyCount = 0;
@@ -166,10 +166,46 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
             enemy->isAlive = false;
         }
         // ------------------------------------------------------------------------------------------- CHECK IF COLLIDES WITH PLAYER
-        if (CheckCollisionRecs(player->hitBox,enemy->hitBox))
+        if (CheckCollisionRecs(player->hitBox,enemy->hitBox) && enemy->isAlive)
         {
-            globalScore = 0;
-            player->SetPlayerScore(0);
+            player->SetPlayerHealth(player->GetPlayerHealth()-1);
+            if (player->GetPlayerHealth() <= 0)
+            {
+                player->isReady = false;
+                player->SetPlayerScore(0);
+                player->SetPlayerHealth(3);
+                player->SetAmmoCount(0);
+               
+
+                // Clear enemies
+                for (Enemy* enemy : enemyList) 
+                {
+                    delete enemy;
+                }
+                enemyList.clear();
+
+                // Reset counters
+                smallEnemyCounter = 0;
+                smallEnemyAmount = 0;
+                mediumEnemyCounter = 0;
+                mediumEnemyAmount = 0;
+                enemyCount = 0;
+
+                // Clear ammo
+                for (Ammo* bullet : ammo) 
+                {
+                    delete bullet;
+                }
+                ammo.clear();
+
+                // Reset global variables
+                globalScore = 0;
+                ClearBonus(bonusList);
+                break;
+               
+            }
+            enemy->isAlive = false;
+
             
             
         }
@@ -242,7 +278,7 @@ Enemy* PopulateEnemies(vector<Enemy*> &enemyList, Texture2D eyeSprite, Texture2D
         smallEnemyCounter++;
         
         return new EyeEnemy(Vector2{(float)xPos, (float)yPos}, eyeSprite);
-
+ 
     }
     else if (mediumEnemyCounter != mediumEnemyAmount)
     {

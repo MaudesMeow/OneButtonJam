@@ -151,3 +151,25 @@ void Player::UpdatePlayerBehavior()
     BulletBehavior();
    
  }
+
+ void DisplayPlayerHealth(int healthAmount, Texture2D sprite)
+ {
+        for (int i = 0 ;  i < healthAmount; i++)
+    {
+        switch (i)
+        {
+        case 0:
+            // DrawTriangleLines(Vector2{16,48},Vector2{32,48},Vector2{24,32},WHITE);
+            DrawTexture(sprite,16,88,WHITE);
+            break;
+        case 1:
+            DrawTexture(sprite,40,88,WHITE);
+            break;
+        case 2:
+            DrawTexture(sprite,64,88,WHITE);
+            break;    
+        default:
+            break;
+        }
+    }
+ }

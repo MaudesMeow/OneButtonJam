@@ -7,7 +7,8 @@
 enum BonusType
 {
     AMMO,
-    TELEPORTER
+    TELEPORTER,
+    HEALTH
 };
 
 class Bonus
@@ -81,9 +82,35 @@ public:
     void DrawBonus() override;
 };
 
+class HealthBonus : public Bonus
+{
+    public:
+
+        Texture2D sprite;
+        HealthBonus()
+        {
+            isValid = true;
+            type = HEALTH;
+        }
+
+        HealthBonus(Vector2 pos,Texture2D sprite)
+        {
+            this->sprite = sprite;
+            this->pos = pos;
+            hitBox = Rectangle{pos.x-16,pos.y,32,32};
+            isValid = true;
+            type = HEALTH;
+        }
+
+        void DrawBonus() override;
+
+};
+
 
 void HandleBonusCollisions(Player *player);
-void UpdateBonusBehavior(vector<Bonus*> &bonusList, Player *player);
-Bonus* PopulateBonuses();
+void UpdateBonusBehavior(vector<Bonus*> &bonusList, Texture2D sprite,Player *player);
+Bonus* PopulateBonuses(Texture2D sprite);
+
+void ClearBonus(vector<Bonus*> &bonusList);
 
 #endif

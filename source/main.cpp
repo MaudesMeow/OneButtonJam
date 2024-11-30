@@ -40,6 +40,7 @@ vector<Bonus*> bonusList;
 vector<Enemy*> enemyList;
 Texture2D enemyOne;
 Texture2D handEnemy;
+Texture2D heartSprite;
 
 Font importedFont;
 
@@ -79,6 +80,8 @@ void Init(void)
     handEnemy = LoadTexture("assets/big-hand.png");
     player = Player(playerSprite, {(float)GetScreenWidth()/2,(float)GetScreenHeight()-64});
     importedFont = LoadFont("assets/Covenant5x5.ttf");
+    heartSprite = LoadTexture("assets/heart.png");
+        
     
 
     InitStars(stars,starCount); 
@@ -93,6 +96,7 @@ void Update(void)
     {
         UpdateStars(stars,starCount);
         player.UpdatePlayerBehavior();
+               
     }
     else
     {
@@ -102,8 +106,8 @@ void Update(void)
         
         UpdateStars(stars,starCount);
         player.UpdatePlayerBehavior();
-        UpdateBonusBehavior(bonusList, &player);
-        UpdateEnemyBehavior(enemyList,&player,enemyOne,handEnemy,player.ammoInventory);
+        UpdateBonusBehavior(bonusList,heartSprite, &player);
+        UpdateEnemyBehavior(enemyList,&player,enemyOne,handEnemy,player.ammoInventory,bonusList);
     }
 
 
@@ -128,12 +132,14 @@ void Draw(void)
     }
     else
     {
+        DrawTextEx(importedFont,"HEALTH",{8,56},14,4,WHITE);
         DrawTextEx(importedFont,"AMMO",{8,2},24,4,WHITE);
-        DrawTextEx(importedFont,TextFormat("SCORE\n\n%i%",player.GetPlayerScore()),{8,64},20,2,WHITE);
+        DrawTextEx(importedFont,TextFormat("SCORE\n\n%i%",player.GetPlayerScore()),{8,128},20,2,WHITE);
 
         player.AnimatePlayer();
         AnimateAmmo(player.ammoInventory);
         DisplayAmmo(player.GetAmmoCount());
+        DisplayPlayerHealth(player.GetPlayerHealth(),heartSprite);
         
 
         for (Bonus *bonus : bonusList)

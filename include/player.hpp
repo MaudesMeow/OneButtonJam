@@ -18,6 +18,7 @@ class Player
         float shooterTimer;
         int score;
         bool isReady;
+        int health;
         
 
         Player() : playerSprite(), pos({0, 0}) {}
@@ -27,12 +28,13 @@ class Player
             this->pos = pos;
             direction = 1;
             speed = 160;
-            ammoCount = 3;
+            ammoCount = 0;
             canShoot = true;
             hitBox = Rectangle{pos.x,pos.y,32,32};
             hasTeleported = false;
             shooterTimer = 0;
             isReady = false;
+            health = 3;
         }
         void AnimatePlayer();
         void HandleInput();
@@ -40,11 +42,15 @@ class Player
         void SetAmmoCount(int amount){ammoCount = amount;};
         void SetPlayerScore(int newScore){score = newScore;};
         int GetPlayerScore(){return score;};
+        void SetPlayerHealth(int newHealth){health = newHealth;};
+        int GetPlayerHealth(){return health;};
         void UpdatePlayerBehavior();
 
     private:
         int ammoCount;
         void BulletBehavior();
 };
+
+void DisplayPlayerHealth(int health,Texture2D sprite);
 
 #endif 

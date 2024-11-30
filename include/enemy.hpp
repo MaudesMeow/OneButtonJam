@@ -4,6 +4,7 @@
 #include "globals.hpp"
 #include "ammo.hpp"
 #include "player.hpp"
+#include "bonus.hpp"
 
 enum EnemyType
 {
@@ -91,7 +92,7 @@ class HandEnemy : public Enemy
         }
 };
 
-void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eyeSprite, Texture2D handSprite,vector<Ammo*> &ammo);
+void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eyeSprite, Texture2D handSprite,vector<Ammo*> &ammo,vector<Bonus*> &bonusList);
 Enemy* PopulateEnemies(vector<Enemy*> &enemyList, Texture2D eyeSprite, Texture2D handSprite, int score);
 
 #endif
