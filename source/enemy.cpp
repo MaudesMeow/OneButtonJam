@@ -64,7 +64,7 @@ void Enemy::DrawEnemies()
 
     }
 
-    DrawTexturePro(sprite,src,dest,origin,rotation,WHITE);
+    DrawTexturePro(sprite,src,dest,origin,0,WHITE);
     
     
     // DrawRectangleLinesEx(hitBox,1,RED);
@@ -78,35 +78,35 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
     
     if (player->score < 500)
     {
-        enemyCount = 8;
-        smallEnemyAmount = 8;
+        enemyCount = 12;
+        smallEnemyAmount = 12;
         mediumEnemyAmount = 0;
         mediumEnemyCounter =0;
         smallEnemyCounter = 0;
     }
     else if (player->score >= 500 && player->score < 1000)
     {
-        enemyCount = 16;
-        smallEnemyAmount = 14;
+        enemyCount = 24;
+        smallEnemyAmount = 22;
         mediumEnemyAmount = 2;
     }
     else if(player->score >= 1000 && player->score < 1500)
     {
-        enemyCount = 24;
-        smallEnemyAmount = 16;
+        enemyCount = 32;
+        smallEnemyAmount = 24;
         mediumEnemyAmount = 8;
     }
     else if(player->score >= 1500 && player->score < 2000)
     {
-        enemyCount = 32;
-        smallEnemyAmount = 18;
-        mediumEnemyAmount = 14;
+        enemyCount = 40;
+        smallEnemyAmount = 28;
+        mediumEnemyAmount = 12;
     }
     else
     {
-        enemyCount = 40;
-        smallEnemyAmount = 20;
-        mediumEnemyAmount = 20;
+        enemyCount = 48;
+        smallEnemyAmount = 24;
+        mediumEnemyAmount = 24;
     }
 
     if (enemyList.size() < enemyCount)
@@ -141,7 +141,7 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
                     enemy->directionTimer = 0;
                 }
                 enemy->pos.y += (enemy->speed * GetFrameTime());
-                enemy->pos.x += (enemy->speed*enemy->direction*GetFrameTime());
+                // enemy->pos.x += (enemy->speed*enemy->direction*GetFrameTime());
                 enemy->hitBox.x = enemy->pos.x - 12;
                 enemy->hitBox.y = enemy->pos.y -16;
             }
@@ -171,6 +171,10 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
             player->SetPlayerHealth(player->GetPlayerHealth()-1);
             if (player->GetPlayerHealth() <= 0)
             {
+                if (player->GetPlayerScore() > globalHighScore)
+                {
+                    globalHighScore = player->GetPlayerScore();
+                }
                 player->isReady = false;
                 player->SetPlayerScore(0);
                 player->SetPlayerHealth(3);
@@ -220,6 +224,8 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
 
                 if (enemy->hitCount <= 0)
                 {
+                    SetSoundVolume(explosion,0.3);
+                    PlaySound(explosion);
                     // cout << "player score is " << player->GetPlayerScore() << endl;
                     enemy->isAlive = false;
                     if (enemy->type == FAST){player->SetPlayerScore(player->GetPlayerScore()+50);};

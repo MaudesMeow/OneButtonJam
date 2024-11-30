@@ -89,12 +89,12 @@ Bonus* PopulateBonuses(Texture2D sprite)
     if (ammoBonusCounter != ammoBonusAmount)
     {
         ammoBonusCounter++;
-        return new AmmosBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),(float)GetRandomValue(-24,-16)});
+        return new AmmosBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-16});
     }
     else if (healthBonusCounter != healthBonusAmount)
     {
         healthBonusCounter++;
-        return new HealthBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),(float)GetRandomValue(-24,-16)},sprite);
+        return new HealthBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-16},sprite);
     }
     else
     {
@@ -134,14 +134,14 @@ void UpdateBonusBehavior(vector<Bonus*> &bonusList, Texture2D sprite, Player *pl
     int bonusCount = 0;
     if (player->score < 500)
     {
-        bonusCount = 1;
+        bonusCount = 2;
         ammoBonusAmount = 1;
-        healthBonusAmount = 0;
+        healthBonusAmount = 1;
     }
     else if (player->score >= 500 && player->score < 1000)
     {
-        bonusCount = 2;
-        ammoBonusAmount = 1;
+        bonusCount = 3;
+        ammoBonusAmount = 2;
         healthBonusAmount = 1;
     }
     else if(player->score >= 1000 && player->score < 1500)
@@ -174,24 +174,42 @@ void UpdateBonusBehavior(vector<Bonus*> &bonusList, Texture2D sprite, Player *pl
     {
         Bonus* bonus = *it;
 
+ 
+
         // Check bonus behavior based on type
         switch (bonus->type)
         {
         case AMMO:
+            if (bonus->pos.y > GetScreenHeight())
+            {
+                bonus->isValid = false;
+                ammoBonusCounter--;
+            }
             if (CheckCollisionRecs(player->hitBox,bonus->hitBox))
             {
                 player->SetAmmoCount(3);
+                SetSoundVolume(ammoCollect,0.3);
+                PlaySound(ammoCollect);
                 player->canShoot = true;
                 bonus->isValid = false;
                 ammoBonusCounter--;
             }
             break;
         case HEALTH:
+            if (bonus->pos.y > GetScreenHeight())
+            {
+                bonus->isValid = false;
+                healthBonusCounter--;
+            }
              if (CheckCollisionRecs(player->hitBox,bonus->hitBox))
             {
+                SetSoundVolume(healthCollect,0.3);
+                PlaySound(healthCollect);
                 
                 if (player->GetPlayerHealth() < 3)
                 {
+                    
+                    
                     player->SetPlayerHealth(3);
                 }
                 bonus->isValid = false;

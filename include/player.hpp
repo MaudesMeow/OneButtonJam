@@ -28,7 +28,7 @@ class Player
             this->pos = pos;
             direction = 1;
             speed = 160;
-            ammoCount = 0;
+            ammoCount = 3;
             canShoot = true;
             hitBox = Rectangle{pos.x,pos.y,32,32};
             hasTeleported = false;

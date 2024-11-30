@@ -42,11 +42,14 @@ Texture2D enemyOne;
 Texture2D handEnemy;
 Texture2D heartSprite;
 
+
 Font importedFont;
 
-
+// ---- globals
 float globalScore = 0;
+int globalHighScore = 0;
 
+Sound explosion,ammoCollect,healthCollect;
 
 
 // ---------------------------------------------------------------------------MAIN FUNCTION
@@ -72,6 +75,8 @@ void Init(void)
     // SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_VSYNC_HINT);
 
     InitWindow(BASE_WIDTH * 2, BASE_HEIGHT * 2, PROJECT_NAME);
+    InitAudioDevice();
+    SetTargetFPS(60);
 
 
 
@@ -81,6 +86,9 @@ void Init(void)
     player = Player(playerSprite, {(float)GetScreenWidth()/2,(float)GetScreenHeight()-64});
     importedFont = LoadFont("assets/Covenant5x5.ttf");
     heartSprite = LoadTexture("assets/heart.png");
+    explosion = LoadSound("assets/explosion2.wav");
+    ammoCollect = LoadSound("assets/ammo-collect.wav");
+    healthCollect = LoadSound("assets/heal-sound.wav");
         
     
 
@@ -128,6 +136,7 @@ void Draw(void)
         DrawTextEx(importedFont,"SPACE",{48,48},192,2,WHITE);
 
         DrawTextEx(importedFont,"MOTH",{112,248 },192,2,WHITE);
+        DrawTextEx(importedFont, TextFormat("Current High Score is: %i", globalHighScore),{(float)GetScreenWidth()/2-184,(float)GetScreenHeight()-128},24,2,WHITE);
         player.AnimatePlayer();
     }
     else

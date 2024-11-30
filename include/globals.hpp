@@ -17,5 +17,8 @@ using namespace std;
 
 
 extern float globalScore;
+extern int globalHighScore;
+
+extern Sound explosion,ammoCollect,healthCollect;
 
 #endif
