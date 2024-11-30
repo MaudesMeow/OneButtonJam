@@ -69,7 +69,7 @@ void AnimateAmmo(vector<Ammo*> &ammo) // Display function for side of screen to 
                 if (am->hasFired)
                 {
 
-                    DrawRectangleLinesEx(am->hitBox,1,RED);
+                    // DrawRectangleLinesEx(am->hitBox,1,RED);
                     DrawTriangleLines(am->p1, am->p2, am->p3, WHITE);
                     DrawRectangleLines(am->bulletPos.x+14,am->bulletPos.y+16, 4,4,ColorAlpha(Color{255,255,255},1.0));
                     
@@ -86,7 +86,7 @@ void AnimateAmmo(vector<Ammo*> &ammo) // Display function for side of screen to 
                 else
                 {
                     // cout << " drawing " << i << endl;
-                    DrawRectangleLinesEx(am->hitBox,1,RED);
+                    // DrawRectangleLinesEx(am->hitBox,1,RED);
                     DrawTriangleLines(am->p1, am->p2, am->p3, WHITE);
                     
                 }
