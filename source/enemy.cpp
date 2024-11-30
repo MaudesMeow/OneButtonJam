@@ -61,7 +61,7 @@ void Enemy::DrawEnemies()
     DrawTexturePro(sprite,src,dest,origin,rotation,WHITE);
     
     
-    DrawRectangleLinesEx(hitBox,1,RED);
+    // DrawRectangleLinesEx(hitBox,1,RED);
     
 }
 
