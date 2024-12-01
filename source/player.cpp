@@ -27,6 +27,9 @@ void Player::HandleInput()
 
         if (IsKeyPressed(KEY_SPACE) )
         {
+            SetSoundVolume(directionChange,0.1);
+            SetSoundPitch(directionChange,0.1);
+            PlaySound(directionChange);
             direction *= -1;
         }
 
@@ -112,6 +115,8 @@ void Player::BulletBehavior()
 
         if (IsKeyPressed(KEY_SPACE) && GetAmmoCount() > 0 && canShoot && !ammo->hasFired )
         {
+            SetSoundVolume(fireAmmoSound,0.2);
+            PlaySound(fireAmmoSound);
             SetAmmoCount(GetAmmoCount() - 1);
             ammo->hasFired = true;
             canShoot = false;

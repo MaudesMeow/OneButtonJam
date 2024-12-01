@@ -19,6 +19,6 @@ using namespace std;
 extern float globalScore;
 extern int globalHighScore;
 
-extern Sound explosion,ammoCollect,healthCollect;
+extern Sound explosion,ammoCollect,healthCollect,directionChange,enemyCollision,enemyDeath,playerDeath,fireAmmoSound;
 
 #endif

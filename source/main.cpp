@@ -49,7 +49,9 @@ Font importedFont;
 float globalScore = 0;
 int globalHighScore = 0;
 
-Sound explosion,ammoCollect,healthCollect;
+Sound explosion,ammoCollect,healthCollect,directionChange,enemyCollision,enemyDeath,playerDeath;
+Sound fireAmmoSound;
+Music backgroundSong;
 
 
 // ---------------------------------------------------------------------------MAIN FUNCTION
@@ -89,6 +91,12 @@ void Init(void)
     explosion = LoadSound("assets/explosion2.wav");
     ammoCollect = LoadSound("assets/ammo-collect.wav");
     healthCollect = LoadSound("assets/heal-sound.wav");
+    backgroundSong = LoadMusicStream("assets/background-song.wav");
+    directionChange = LoadSound("assets/beep1.wav");
+    enemyCollision = LoadSound("assets/enemy-collision.wav");
+    enemyDeath = LoadSound("assets/enemy-death.wav");
+    playerDeath = LoadSound("assets/player-death.wav");
+    fireAmmoSound = LoadSound("assets/fire-ammo.wav");
         
     
 
@@ -99,6 +107,18 @@ void Init(void)
 // ---------------------------------------------------------------------------UPDATE FUNCTION
 void Update(void)
 {
+    UpdateMusicStream(backgroundSong);
+    if (!IsMusicStreamPlaying(backgroundSong))
+    {
+
+        SetMusicVolume(backgroundSong,0.3);
+
+        PlayMusicStream(backgroundSong);
+    }
+    if (player.isReady)
+    {
+        StopMusicStream(backgroundSong);
+    }
 
     if (!player.isReady)
     {
