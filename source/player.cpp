@@ -27,8 +27,7 @@ void Player::HandleInput()
 
         if (IsKeyPressed(KEY_SPACE) )
         {
-            SetSoundVolume(directionChange,0.1);
-            SetSoundPitch(directionChange,0.1);
+
             PlaySound(directionChange);
             direction *= -1;
         }
@@ -97,58 +96,48 @@ void Player::AnimatePlayer()
 }
 
 
-void Player::BulletBehavior()
-{
-    if (ammoInventory.size() < ammoCount)
-    {
-        ammoInventory.push_back(PopulateAmmo());
-    }
-    
-    for (auto it = ammoInventory.begin(); it != ammoInventory.end(); )
-    {
-        Ammo* ammo = *it;
-
-        if (shooterTimer > 0.3)
-        {
-            canShoot = true;
+void Player::BulletBehavior() {
+    if (ammoInventory.empty()) {
+        // Populate the fixed pool with 3 ammo objects
+        for (int i = 0; i < 3; ++i) {
+            ammoInventory.push_back(PopulateAmmo());
         }
-
-        if (IsKeyPressed(KEY_SPACE) && GetAmmoCount() > 0 && canShoot && !ammo->hasFired )
-        {
-            SetSoundVolume(fireAmmoSound,0.2);
-            PlaySound(fireAmmoSound);
-            SetAmmoCount(GetAmmoCount() - 1);
-            ammo->hasFired = true;
-            canShoot = false;
-            
-            shooterTimer = 0;  // Reset timer only after firing
-            
-
-        }
-        shooterTimer += GetFrameTime();  // Increment timer outside of conditions
-
-    
-        ammo->SetAmmoPos(pos,direction);
-
-        if (ammo->hasCollided || ammo->bulletPos.y <= 0)
-        {
-            // Delete the enemy object to prevent memory leaks
-            delete ammo;  
-            
-            
-            it = ammoInventory.erase(it);
-        }
-        else
-        {
-            // Increment the iterator if the enemy is still alive
-            ++it;
-        }
-        
     }
 
-   
+    // Handle firing
+    if (IsKeyPressed(KEY_SPACE) && GetAmmoCount() > 0 && canShoot) {
+        for (Ammo* ammo : ammoInventory) {
+            if (!ammo->isActive) {
+                PlaySound(fireAmmoSound);
+                SetAmmoCount(GetAmmoCount() - 1);
+                ammo->isActive = true;
+                ammo->hasFired = true;
+                ammo->bulletPos = pos; // Set initial position
+                canShoot = false;
+                shooterTimer = 0; // Reset timer
+                break;
+            }
+        }
+    }
 
+    // Update timer
+    shooterTimer += GetFrameTime();
+    if (shooterTimer > 0.3f) {
+        canShoot = true;
+    }
+
+    // Update ammo behavior
+    for (Ammo* ammo : ammoInventory) {
+        if (!ammo->isActive) continue;
+
+        ammo->SetAmmoPos(pos, direction);
+
+        if (ammo->hasCollided || ammo->bulletPos.y <= 0) {
+            ammo->Reset(); // Reset ammo instead of deleting
+        }
+    }
 }
+
 
 void Player::UpdatePlayerBehavior()
 {

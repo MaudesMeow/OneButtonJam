@@ -24,76 +24,44 @@ void DisplayAmmo(int ammoCount) // Display function for side of screen to let pl
 
 }
 
-void Ammo::SetAmmoPos(Vector2 pos,int direction)
-{
+void Ammo::SetAmmoPos(Vector2 pos, int direction) {
+    if (!isActive) return;
 
-    if (!hasFired)
-    {
+    if (!hasFired) {
         bulletPos = pos;
-        hitBox.x = bulletPos.x+8;
-        hitBox.y = bulletPos.y-16;
-        p1.x = bulletPos.x+8;
-        p1.y = bulletPos.y;
-        p2.x = bulletPos.x + 24;
-        p2.y = bulletPos.y;
-        p3.x = bulletPos.x + 16;
-        p3.y = bulletPos.y - 16;
+        hitBox.x = bulletPos.x + 8;
+        hitBox.y = bulletPos.y - 16;
+    } else {
+        bulletPos.y -= (speed * GetFrameTime());
+        hitBox.x = bulletPos.x + 8;
+        hitBox.y = bulletPos.y - 16;
     }
-    else
-    {
-        bulletPos.y -= (speed*GetFrameTime());
-        hitBox.x = bulletPos.x+8;
-        hitBox.y = bulletPos.y-16;
-        p1.x = bulletPos.x+8;
-        p1.y = bulletPos.y;
-        p2.x = bulletPos.x + 24;
-        p2.y = bulletPos.y;
-        p3.x = bulletPos.x + 16;
-        p3.y = bulletPos.y - 16;
 
-    }
-            
-
+    // Update triangle points
+    p1 = {bulletPos.x + 8, bulletPos.y};
+    p2 = {bulletPos.x + 24, bulletPos.y};
+    p3 = {bulletPos.x + 16, bulletPos.y - 16};
 }
-void AnimateAmmo(vector<Ammo*> &ammo) // Display function for side of screen to let player know how much ammo they have 
-{
 
-        // if (!ammo.empty())
-        // {
-        //     for (Ammo *am : ammo)
-        //     {
-                for (int i = 0; i < ammo.size(); i++)
-                {
-                Ammo *am = ammo[i];
-                
-                if (am->hasFired)
-                {
+void AnimateAmmo(std::vector<Ammo*>& ammoInventory) {
+    for (Ammo* ammo : ammoInventory) {
+        // Skip drawing if the ammo is inactive
+        if (!ammo->isActive) continue;
 
-                    // DrawRectangleLinesEx(am->hitBox,1,RED);
-                    DrawTriangleLines(am->p1, am->p2, am->p3, WHITE);
-                    DrawRectangleLines(am->bulletPos.x+14,am->bulletPos.y+16, 4,4,ColorAlpha(Color{255,255,255},1.0));
-                    
-                    DrawRectangleLines(am->bulletPos.x+14,am->bulletPos.y+24, 4,4,ColorAlpha(Color{255,255,255},0.8));
-                    
-                    DrawRectangleLines(am->bulletPos.x+14,am->bulletPos.y+32, 4,4,ColorAlpha(Color{255,255,255},0.5));
-                    
-                    DrawRectangleLines(am->bulletPos.x+14,am->bulletPos.y+36, 4,4,ColorAlpha(Color{255,255,255},0.5));
-                    DrawRectangleLines(am->bulletPos.x+14,am->bulletPos.y+40, 4,4,ColorAlpha(Color{255,255,255},0.3));
-                    DrawRectangleLines(am->bulletPos.x+14,am->bulletPos.y+44, 4,4,ColorAlpha(Color{255,255,255},0.3));
-                    // DrawRectangleLines(am->p1.x-2,am->p1.y+9, 4,4,ColorAlpha(Color{255,255,255},0.03));
-                    // DrawRectangleLines(am->p1.x-2,am->p1.y+10, 4,4,ColorAlpha(Color{255,255,255},0.01));  
-                }
-                else
-                {
-                    // cout << " drawing " << i << endl;
-                    // DrawRectangleLinesEx(am->hitBox,1,RED);
-                    DrawTriangleLines(am->p1, am->p2, am->p3, WHITE);
-                    
-                }
-                }
-        //     }
-        // }
-
+        if (ammo->hasFired) {
+            // Draw fired ammo
+            DrawTriangleLines(ammo->p1, ammo->p2, ammo->p3, WHITE);
+            DrawRectangleLines(ammo->bulletPos.x + 14, ammo->bulletPos.y + 16, 4, 4, ColorAlpha(WHITE, 1.0f));
+            DrawRectangleLines(ammo->bulletPos.x + 14, ammo->bulletPos.y + 24, 4, 4, ColorAlpha(WHITE, 0.8f));
+            DrawRectangleLines(ammo->bulletPos.x + 14, ammo->bulletPos.y + 32, 4, 4, ColorAlpha(WHITE, 0.5f));
+            DrawRectangleLines(ammo->bulletPos.x + 14, ammo->bulletPos.y + 36, 4, 4, ColorAlpha(WHITE, 0.5f));
+            DrawRectangleLines(ammo->bulletPos.x + 14, ammo->bulletPos.y + 40, 4, 4, ColorAlpha(WHITE, 0.3f));
+            DrawRectangleLines(ammo->bulletPos.x + 14, ammo->bulletPos.y + 44, 4, 4, ColorAlpha(WHITE, 0.3f));
+        } else {
+            // Draw idle ammo
+            DrawTriangleLines(ammo->p1, ammo->p2, ammo->p3, WHITE);
+        }
+    }
 }
 
 

@@ -78,7 +78,7 @@ void Init(void)
 
     InitWindow(BASE_WIDTH * 2, BASE_HEIGHT * 2, PROJECT_NAME);
     InitAudioDevice();
-    SetTargetFPS(60);
+    
 
 
 
@@ -97,6 +97,16 @@ void Init(void)
     enemyDeath = LoadSound("assets/enemy-death.wav");
     playerDeath = LoadSound("assets/player-death.wav");
     fireAmmoSound = LoadSound("assets/fire-ammo.wav");
+
+    SetSoundVolume(fireAmmoSound,0.2);
+    SetSoundVolume(directionChange,0.1);
+    SetSoundPitch(directionChange,0.1);
+    SetSoundVolume(ammoCollect,0.3);
+    SetSoundVolume(healthCollect,0.3);
+    SetSoundVolume(enemyCollision,0.3);
+
+    SetSoundVolume(explosion,0.3);
+
         
     
 
@@ -153,10 +163,11 @@ void Draw(void)
     // --------------------------------------------------------------------- DRAW text     
     if (!player.isReady)
     {
-        DrawTextEx(importedFont,"SPACE",{48,48},192,2,WHITE);
+        DrawTextEx(importedFont,"SPACE",{114,48},96,2,WHITE);
 
-        DrawTextEx(importedFont,"MOTH",{112,248 },192,2,WHITE);
-        DrawTextEx(importedFont, TextFormat("Current High Score is: %i", globalHighScore),{(float)GetScreenWidth()/2-184,(float)GetScreenHeight()-128},24,2,WHITE);
+        DrawTextEx(importedFont,"MOTH",{160,124 },96,2,WHITE);
+        DrawTextEx(importedFont, TextFormat("current high score is: %i", globalHighScore),{(float)GetScreenWidth()/2-184,(float)GetScreenHeight()-128},24,2,WHITE);
+        DrawTextEx(importedFont, "the only available button is the space bar\nthe space bar will change your direction\nand shoot if you have ammo\nhold the space bar to gather more speed",{(float)GetScreenWidth()/2-192,320},16,2,WHITE);
         player.AnimatePlayer();
     }
     else
@@ -164,6 +175,7 @@ void Draw(void)
         DrawTextEx(importedFont,"HEALTH",{8,56},14,4,WHITE);
         DrawTextEx(importedFont,"AMMO",{8,2},24,4,WHITE);
         DrawTextEx(importedFont,TextFormat("SCORE\n\n%i%",player.GetPlayerScore()),{8,128},20,2,WHITE);
+        DrawTextEx(importedFont,TextFormat("SCORE\n\n%i%",GetFPS()),{8,164},20,2,WHITE);
 
         player.AnimatePlayer();
         AnimateAmmo(player.ammoInventory);

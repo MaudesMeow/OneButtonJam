@@ -15,6 +15,7 @@ class Bonus
 {
 public:
     Vector2 pos,p1,p2,p3;
+    Vector2 p4,p5,p6,p7,p8,p9;
     BonusType type;
     bool isValid;
     int radius;
@@ -30,7 +31,7 @@ public:
 class AmmosBonus : public Bonus
 {
 public:
-        Vector2 p4,p5,p6,p7,p8,p9;
+        
     AmmosBonus() : Bonus()
     {
         type = AMMO;

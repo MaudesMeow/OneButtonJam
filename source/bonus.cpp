@@ -86,12 +86,12 @@ Bonus* PopulateBonuses(Texture2D sprite)
 
     int bonusOption = GetRandomValue(1,1);
 
-    if (ammoBonusCounter != ammoBonusAmount)
+    if (ammoBonusCounter < ammoBonusAmount)
     {
         ammoBonusCounter++;
         return new AmmosBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-16});
     }
-    else if (healthBonusCounter != healthBonusAmount)
+    else if (healthBonusCounter < healthBonusAmount)
     {
         healthBonusCounter++;
         return new HealthBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-16},sprite);
@@ -132,35 +132,35 @@ void UpdateBonusBehavior(vector<Bonus*> &bonusList, Texture2D sprite, Player *pl
 
 
     int bonusCount = 0;
-    if (player->score < 500)
+    if (player->score < 5)
+    {
+        bonusCount = 0;
+        ammoBonusAmount = 0;
+        healthBonusAmount = 0;
+    }
+    else if (player->score >= 5 && player->score < 800)
     {
         bonusCount = 2;
         ammoBonusAmount = 1;
         healthBonusAmount = 1;
     }
-    else if (player->score >= 500 && player->score < 1000)
+    else if(player->score >= 800 && player->score < 1200)
     {
         bonusCount = 3;
         ammoBonusAmount = 2;
         healthBonusAmount = 1;
     }
-    else if(player->score >= 1000 && player->score < 1500)
+    else if(player->score >= 1200 && player->score < 1600)
     {
         bonusCount = 4;
         ammoBonusAmount = 3;
         healthBonusAmount = 1;
     }
-    else if(player->score >= 1500 && player->score < 2000)
+    else
     {
         bonusCount = 8;
         ammoBonusAmount = 5;
         healthBonusAmount = 3;
-    }
-    else
-    {
-        bonusCount = 16;
-        ammoBonusAmount = 10;
-        healthBonusAmount = 6;
     }
 
     if (bonusList.size() < bonusCount)
@@ -170,10 +170,9 @@ void UpdateBonusBehavior(vector<Bonus*> &bonusList, Texture2D sprite, Player *pl
 
 
     // Iterate over the bonus list, handle validity, and update behavior in one pass
-    for (auto it = bonusList.begin(); it != bonusList.end(); )
+    for (Bonus* bonus : bonusList)
     {
-        Bonus* bonus = *it;
-
+        
  
 
         // Check bonus behavior based on type
@@ -183,27 +182,27 @@ void UpdateBonusBehavior(vector<Bonus*> &bonusList, Texture2D sprite, Player *pl
             if (bonus->pos.y > GetScreenHeight())
             {
                 bonus->isValid = false;
-                ammoBonusCounter--;
+                
             }
             if (CheckCollisionRecs(player->hitBox,bonus->hitBox))
             {
                 player->SetAmmoCount(3);
-                SetSoundVolume(ammoCollect,0.3);
+                
                 PlaySound(ammoCollect);
                 player->canShoot = true;
                 bonus->isValid = false;
-                ammoBonusCounter--;
+                
             }
             break;
         case HEALTH:
             if (bonus->pos.y > GetScreenHeight())
             {
                 bonus->isValid = false;
-                healthBonusCounter--;
+                
             }
              if (CheckCollisionRecs(player->hitBox,bonus->hitBox))
             {
-                SetSoundVolume(healthCollect,0.3);
+                
                 PlaySound(healthCollect);
                 
                 if (player->GetPlayerHealth() < 3)
@@ -213,7 +212,7 @@ void UpdateBonusBehavior(vector<Bonus*> &bonusList, Texture2D sprite, Player *pl
                     player->SetPlayerHealth(3);
                 }
                 bonus->isValid = false;
-                healthBonusCounter--;
+                
             }
             break;           
         case TELEPORTER:
@@ -236,16 +235,32 @@ void UpdateBonusBehavior(vector<Bonus*> &bonusList, Texture2D sprite, Player *pl
             break;
         }
 
-        // Remove invalid bonuses after updating behavior
+        // -----------------------------------------------------------------------------Remove invalid bonuses after updating behavior
         if (!bonus->isValid)
         {
-            delete bonus;  // Free memory to prevent leaks
-            it = bonusList.erase(it);  // Erase and update iterator
+            bonus->pos = Vector2{(float)GetRandomValue(92, GetScreenWidth() - 92), (float)GetRandomValue(-128,-16)};
+            bonus->hitBox.x = bonus->pos.x;
+            bonus->hitBox.y = bonus->pos.y;
+            // For AmmosBonus, reset the triangle points and hitbox
+            if (bonus->type == AMMO)
+            {
+                
+                bonus->p1 = bonus->pos;
+                bonus->p1 = {bonus->pos.x -16, bonus->pos.y + 32};
+                bonus->p2 = {bonus->pos.x +16, bonus->pos.y + 32};
+                bonus->p3 = {bonus->pos.x, bonus->pos.y };
+                bonus->p4 = {bonus->p1.x ,bonus->p1.y};
+                bonus->p5 = {bonus->p2.x,bonus->p1.y};
+                bonus->p6 = {bonus->p3.x ,bonus->p1.y};
+                bonus->p7 = {bonus->p4.x+2 ,bonus->p4.y-2};
+                bonus->p8 = {bonus->p5.x-2,bonus->p5.y-2};
+                bonus->p9 = {bonus->p6.x ,bonus->p6.y+2};
+
+            }
+
+            bonus->isValid = true;
         }
-        else
-        {
-            ++it;  // Move to the next element if no removal occurred
-        }
+
     }
 }
 

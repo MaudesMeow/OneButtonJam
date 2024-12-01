@@ -5,32 +5,27 @@
 
 
 
-class Ammo
-{
-    public:
-        Vector2 bulletPos,p1,p2,p3;
-        float speed;
-        bool hasCollided,hasFired;
-        Rectangle hitBox;
-        
+class Ammo {
+public:
+    bool hasFired = false;
+    bool hasCollided = false;
+    bool isActive = false; // New: Controls ammo state
+    Vector2 bulletPos = {0, 0};
+    Rectangle hitBox = {0, 0, 16, 16};
+    int speed = 300;
+    Vector2 p1, p2, p3;
 
-        Ammo()
-        {
-            bulletPos = {0,0};
-            hasCollided = false;
-            speed = 680;
-            
-            hasFired = false;
-            hitBox = Rectangle{bulletPos.x,bulletPos.y,16,16};
-        };
+    void Reset() {
+        hasFired = false;
+        hasCollided = false;
+        isActive = false; // Reset to inactive state
+        bulletPos = {0, 0};
+    }
 
-
-        
-        
-        void SetAmmoPos(Vector2 pos,int direction);
+    void SetAmmoPos(Vector2 pos, int direction);
     
-
 };
+
 
 void DisplayAmmo(int ammoCount);
 

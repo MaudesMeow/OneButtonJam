@@ -1,6 +1,6 @@
 # i.e. https://itch-user.itch.io/itch-page
 ITCH_USER = the-bert
-ITCH_PAGE = thecastle
+ITCH_PAGE = spacemoth
 
 PROJECT_NAME 	= "Game"
 PROJECT_VERSION = "0.1"

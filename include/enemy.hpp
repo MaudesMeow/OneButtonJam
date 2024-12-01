@@ -55,7 +55,7 @@ class EyeEnemy : public Enemy
             size = 48;
             type = FAST;
             isAlive = true;
-            waitTime = GetRandomValue(0,10);
+            waitTime = GetRandomValue(0,2);
             counter = 0;
             this->sprite = sprite;
             hitBox = Rectangle{pos.x,pos.y,32,32};
@@ -82,7 +82,7 @@ class HandEnemy : public Enemy
             size = 48;
             type = AVERAGE;
             isAlive = true;
-            waitTime = GetRandomValue(0,10);
+            waitTime = GetRandomValue(0,2);
             counter = 0;
             this->sprite = sprite;
             hitBox = Rectangle{pos.x,pos.y,64,64};
