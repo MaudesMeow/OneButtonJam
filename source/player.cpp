@@ -11,7 +11,7 @@ void Player::HandleInput()
     if (!isReady)
     {
         pos.x = GetScreenWidth()/2 - 16;
-        if (IsKeyPressed(KEY_SPACE))
+        if (IsKeyPressed(KEY_SPACE) && !IsSoundPlaying(playerDeath))
         {
             isReady = true;
         }
@@ -97,17 +97,22 @@ void Player::AnimatePlayer()
 
 
 void Player::BulletBehavior() {
-    if (ammoInventory.empty()) {
+    if (ammoInventory.empty()) 
+    {
         // Populate the fixed pool with 3 ammo objects
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 3; ++i) 
+        {
             ammoInventory.push_back(PopulateAmmo());
         }
     }
 
     // Handle firing
-    if (IsKeyPressed(KEY_SPACE) && GetAmmoCount() > 0 && canShoot) {
-        for (Ammo* ammo : ammoInventory) {
-            if (!ammo->isActive) {
+    if (IsKeyPressed(KEY_SPACE) && GetAmmoCount() > 0 && canShoot)
+     {
+        for (Ammo* ammo : ammoInventory) 
+        {
+            if (!ammo->isActive) 
+            {
                 PlaySound(fireAmmoSound);
                 SetAmmoCount(GetAmmoCount() - 1);
                 ammo->isActive = true;
@@ -122,17 +127,20 @@ void Player::BulletBehavior() {
 
     // Update timer
     shooterTimer += GetFrameTime();
-    if (shooterTimer > 0.3f) {
+    if (shooterTimer > 0.3f) 
+    {
         canShoot = true;
     }
 
     // Update ammo behavior
-    for (Ammo* ammo : ammoInventory) {
+    for (Ammo* ammo : ammoInventory) 
+    {
         if (!ammo->isActive) continue;
 
         ammo->SetAmmoPos(pos, direction);
 
-        if (ammo->hasCollided || ammo->bulletPos.y <= 0) {
+        if (ammo->hasCollided || ammo->bulletPos.y <= 0) 
+        {
             ammo->Reset(); // Reset ammo instead of deleting
         }
     }

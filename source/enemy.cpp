@@ -17,7 +17,10 @@ void Enemy::DrawEnemies()
 
 
     float frameTime = 0.3f; // Time per frame in seconds 
-    int currentFrame = static_cast<int>(GetTime() / frameTime) % numFrames;
+    static float animationTime = 0.0f;
+    animationTime += GetFrameTime()/2;
+    int currentFrame = int(animationTime / frameTime) % numFrames;
+
 
     src = 
     {
@@ -76,7 +79,7 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
     // ------------------------------------------------------------------------------------------- HOW MANY ENEMIES TO POPULATE
     enemyCount = 0;
     
-    if (player->score < 500)
+    if (player->score < 150)
     {
         enemyCount = 2;
         smallEnemyAmount = 2;
@@ -84,19 +87,19 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
         mediumEnemyCounter =0;
         smallEnemyCounter = 0;
     }
-    else if (player->score >= 500 && player->score < 1000)
+    else if (player->score >= 150 && player->score < 300)
     {
         enemyCount = 4;
         smallEnemyAmount = 3;
         mediumEnemyAmount = 1;
     }
-    else if(player->score >= 1000 && player->score < 1500)
+    else if(player->score >= 300 && player->score < 450)
     {
         enemyCount = 6;
         smallEnemyAmount = 4;
         mediumEnemyAmount = 2;
     }
-    else if(player->score >= 1500 && player->score < 2000)
+    else if(player->score >= 450 && player->score < 600)
     {
         enemyCount = 8;
         smallEnemyAmount = 5;
@@ -117,8 +120,8 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
     // ------------------------------------------------------------------------------------------- Iterate over the enemy list and update behavior
     for (Enemy* enemy: enemyList)
     {
-        
-        enemy->counter += GetFrameTime();
+        float deltaTime = GetFrameTime();
+        enemy->counter += deltaTime;
         // enemy->directionTimer += GetFrameTime();
         // ------------------------------------------------------------------------------------------- Update enemy position
 
@@ -128,8 +131,8 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
             if (enemy->counter > enemy->waitTime)
             {
 
-                enemy->pos.y += (enemy->speed * GetFrameTime());
-                // enemy->pos.x += (enemy->speed*enemy->direction*GetFrameTime());
+                enemy->pos.y += (enemy->speed * deltaTime);
+                // enemy->pos.x += (enemy->speed*enemy->direction*deltaTime);
                 enemy->hitBox.x = enemy->pos.x - 12;
                 enemy->hitBox.y = enemy->pos.y -16;
             }
@@ -137,7 +140,7 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
         case AVERAGE:
             if (enemy->counter > enemy->waitTime)
             {
-                enemy->pos.y += (enemy->speed * GetFrameTime());
+                enemy->pos.y += (enemy->speed * deltaTime);
                 enemy->hitBox.x = enemy->pos.x;
                 enemy->hitBox.y = enemy->pos.y;
             }
@@ -219,35 +222,30 @@ void UpdateEnemyBehavior(vector<Enemy*> &enemyList, Player *player,Texture2D eye
         // ------------------------------------------------------------------------------------------- CHECK IF ENEMY IS SHOT
         for (Ammo *ammo : ammo)
         {
-            if (CheckCollisionRecs(ammo->hitBox,enemy->hitBox) && ammo->hasFired)
+
+            if (ammo->hasFired)
             {
-
-                ammo->Reset();
-                
-                enemy->SetHitCount(enemy->GetHitCount() - 1);
-
-                if (enemy->hitCount <= 0)
+                if (CheckCollisionRecs(ammo->hitBox,enemy->hitBox))
                 {
-                    PlaySound(explosion);
-                    // cout << "player score is " << player->GetPlayerScore() << endl;
-                    enemy->isAlive = false;
-                    if (enemy->type == FAST){player->SetPlayerScore(player->GetPlayerScore()+50);};
-                    if (enemy->type == AVERAGE){player->SetPlayerScore(player->GetPlayerScore()+100);};
-                    if (enemy->type == SLOW){player->SetPlayerScore(player->GetPlayerScore()+150);};
-                    // if (enemy->type == FAST)
-                    // {
-                    //     smallEnemyCounter--;
-                    // }
-                    // else if (enemy->type == AVERAGE)
-                    // {
-                    //     mediumEnemyCounter--;
-                    // }
+
+                    ammo->Reset();
                     
-                    // cout << "player score is " << player->GetPlayerScore() << endl;
+                    enemy->SetHitCount(enemy->GetHitCount() - 1);
+
+                    if (enemy->hitCount <= 0)
+                    {
+                        PlaySound(explosion);
+                        // cout << "player score is " << player->GetPlayerScore() << endl;
+                        enemy->isAlive = false;
+                        if (enemy->type == FAST){globalScore += 25;};
+                        if (enemy->type == AVERAGE){globalScore += 75;};
+                        if (enemy->type == SLOW){globalScore += 150;};
+
+
+                    }
+
 
                 }
-
-
             }
         }
 

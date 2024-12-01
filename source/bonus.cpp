@@ -70,16 +70,6 @@ void HealthBonus::DrawBonus()
     DrawTexturePro(sprite,src,dest,{0,0},0,WHITE);
 }
 
-void TeleporterBonus::DrawBonus()
-{
-
-    // DrawCircleLines(pos.x,pos.y, 20, BLUE);
-    pos.y += (240 *GetFrameTime());
-    if (pos.y > GetScreenHeight()+16)
-    {
-        isValid = false;
-    }
-}
 
 Bonus* PopulateBonuses(Texture2D sprite)
 {
@@ -103,9 +93,6 @@ Bonus* PopulateBonuses(Texture2D sprite)
         case 1:
             return new AmmosBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),(float)GetRandomValue(-128,-16)});
             break;
-        case 2: 
-            return new TeleporterBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-16});
-            break;
         default:
             return NULL;
             break;
@@ -116,9 +103,7 @@ Bonus* PopulateBonuses(Texture2D sprite)
     case 1:
         return new AmmosBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),(float)GetRandomValue(-128,-16)});
         break;
-    case 2: 
-        return new TeleporterBonus(Vector2{(float)GetRandomValue(92,GetScreenWidth()-92),-16});
-        break;
+
     default:
         return NULL;
         break;
@@ -158,9 +143,9 @@ void UpdateBonusBehavior(vector<Bonus*> &bonusList, Texture2D sprite, Player *pl
     }
     else
     {
-        bonusCount = 8;
-        ammoBonusAmount = 5;
-        healthBonusAmount = 3;
+        bonusCount = 5;
+        ammoBonusAmount = 3;
+        healthBonusAmount = 2;
     }
 
     if (bonusList.size() < bonusCount)
@@ -215,21 +200,6 @@ void UpdateBonusBehavior(vector<Bonus*> &bonusList, Texture2D sprite, Player *pl
                 
             }
             break;           
-        case TELEPORTER:
-            if (CheckCollisionCircleRec(bonus->pos, bonus->radius, player->hitBox))
-            {
-                if (!player->hasTeleported)
-                {
-                    Vector2 tempBonus = bonusList[GetRandomValue(0, (bonusList.size()) - 1)]->pos;
-                    player->pos = tempBonus;
-                    player->hitBox.x = player->pos.x;
-                    player->hitBox.y = player->pos.y;
-                    player->hasTeleported = true;  // Mark as teleported
-                    bonus->isValid = false;
-                }
-            }
-            
-            break;
 
         default:
             break;

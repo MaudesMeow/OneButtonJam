@@ -86,7 +86,7 @@ class HandEnemy : public Enemy
             counter = 0;
             this->sprite = sprite;
             hitBox = Rectangle{pos.x,pos.y,64,64};
-            speed = 240;
+            speed = 196;
             rotation = 0;
             hitCount = 2;
         }

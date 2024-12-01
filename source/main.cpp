@@ -31,7 +31,7 @@ void UpdateDrawFrame(void);
 
 float posX = 0;
 int direction = 1;
-const int starCount =  2000;
+const int starCount =  15;
 Stars stars[starCount];
 
 
@@ -58,13 +58,15 @@ Music backgroundSong;
 int main(void)
 {
     Init();
-
+    
 #ifdef PLATFORM_WEB
     // (main loop function, fps, simulate infinite loop)
     emscripten_set_main_loop(UpdateDrawFrame, 60, 1);
 #else
+    SetTargetFPS(60);
     while (!WindowShouldClose())
     {
+        
         UpdateDrawFrame();
     }
 #endif
@@ -79,7 +81,6 @@ void Init(void)
     InitWindow(BASE_WIDTH * 2, BASE_HEIGHT * 2, PROJECT_NAME);
     InitAudioDevice();
     
-
 
 
     Texture2D playerSprite = LoadTexture("assets/player-bug.png");
@@ -104,6 +105,7 @@ void Init(void)
     SetSoundVolume(ammoCollect,0.3);
     SetSoundVolume(healthCollect,0.3);
     SetSoundVolume(enemyCollision,0.3);
+    
 
     SetSoundVolume(explosion,0.3);
 
@@ -138,7 +140,7 @@ void Update(void)
     }
     else
     {
-        globalScore += 0.25;
+        globalScore += (0.1 * GetFrameTime() * 60);
     
         player.SetPlayerScore((int)floor(globalScore));
         
@@ -169,13 +171,22 @@ void Draw(void)
         DrawTextEx(importedFont, TextFormat("current high score is: %i", globalHighScore),{(float)GetScreenWidth()/2-184,(float)GetScreenHeight()-128},24,2,WHITE);
         DrawTextEx(importedFont, "the only available button is the space bar\nthe space bar will change your direction\nand shoot if you have ammo\nhold the space bar to gather more speed",{(float)GetScreenWidth()/2-192,320},16,2,WHITE);
         player.AnimatePlayer();
+
+        if (IsKeyDown(KEY_TAB))
+        {
+             DrawTextEx(importedFont,TextFormat("FPS\n\n%i%",GetFPS()),{8,364},20,2,WHITE);          
+        }
     }
     else
     {
         DrawTextEx(importedFont,"HEALTH",{8,56},14,4,WHITE);
         DrawTextEx(importedFont,"AMMO",{8,2},24,4,WHITE);
-        DrawTextEx(importedFont,TextFormat("SCORE\n\n%i%",player.GetPlayerScore()),{8,128},20,2,WHITE);
-        DrawTextEx(importedFont,TextFormat("SCORE\n\n%i%",GetFPS()),{8,164},20,2,WHITE);
+        DrawTextEx(importedFont,TextFormat("SCORE\n\n%i%",player.GetPlayerScore()),{8,128},18,2,WHITE);
+        DrawTextEx(importedFont,TextFormat("HIGH\nSCORE\n\n%i%",globalHighScore),{8,232},18,2,WHITE);
+        if (IsKeyDown(KEY_TAB))
+        {
+             DrawTextEx(importedFont,TextFormat("FPS\n\n%i%",GetFPS()),{8,364},20,2,WHITE);          
+        }
 
         player.AnimatePlayer();
         AnimateAmmo(player.ammoInventory);
@@ -213,6 +224,7 @@ void Unload(void)
 // ---------------------------------------------------------------------------UPDATE AND DRAW FUNCTION
 void UpdateDrawFrame(void)
 {
+   
     Update();
 
     BeginDrawing();

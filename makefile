@@ -3,7 +3,7 @@ ITCH_USER = the-bert
 ITCH_PAGE = spacemoth
 
 PROJECT_NAME 	= "Game"
-PROJECT_VERSION = "0.1"
+PROJECT_VERSION = "0.2"
 
 
 # Define PROJECT_NAME, PROJECT_VERSION, and resolution variables for use in code
